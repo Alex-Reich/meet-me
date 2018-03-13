@@ -1,5 +1,5 @@
 var expressSession = require('express-session');
-var mongoStore = require('connect-mongodb-session')(expressSession);
+var mongoStore = require('connect-mongodb-session')(expressSession); // ties our sessions into our current mongo db (this is one option: could also set up session storage in a separate server -- redis, etc.)
 var store = new mongoStore({
     uri: 'mongodb://test:test@ds044907.mlab.com:44907/mwm-db',
     collection: 'Sessions'
