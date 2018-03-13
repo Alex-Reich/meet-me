@@ -11,7 +11,7 @@ var authRoutes = require('./auth/routes');
 
 var whitelist = ['http://localhost:8080'];
 var corsOptions = {
-    origin: function (origin, callback) {
+    origin: function(origin, callback) {
         var originIsWhitelisted = whitelist.indexOf(origin) !== -1
         callback(null, originIsWhitelisted)
     },
@@ -21,14 +21,14 @@ var corsOptions = {
 server.use(cors(corsOptions));
 server.use(session);
 server.use(bp.json());
-server.use(bp.urlencoded({extended: true}));
+server.use(bp.urlencoded({ extended: true }));
 
-server.use(authRoutes);
+server.use(authRoutes.router);
 
-server.use('*', (error, req, res, next)=>{
+server.use('*', (error, req, res, next) => {
     res.status(400).send(error);
 });
 
-server.listen(port, ()=>{
+server.listen(port, () => {
     console.log('Server Is Running On Port: ', port);
 });

@@ -1,18 +1,18 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
-var Schema = mongoose.Schema;
-var schemaName = 'User';
-var ObjectId = mongoose.SchemaTypes.ObjectId
+var mongoose = require('mongoose')
+var bcrypt = require('bcryptjs')
+var Schema = mongoose.Schema
+var schemaName = "User"
+const SALT_FACTOR = 13
 
-const SALT_FACTOR = 13;
+
+
 
 var schema = new Schema({
     username: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true, minlength: 6 },
     name: { type: String },
-    address: { type: String },
-    contacts: { type: Array }
+    address: { type: String }
 });
 
 schema.statics.generateHash = function(password) {
