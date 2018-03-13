@@ -1,23 +1,21 @@
-var router = require('express').Router()
-var Users = require('../models/user')
-// You never create a route like '/api/users' -- except perhaps for a priveledged admin user
-router.post('/auth/register', (req, res) => { // never call 'next' inside an auth route!
-  req.body.password = Users.generateHash(req.body.password)  // don't bother with a confirmPassword on backend -- use that for front-end validation
-  console.log(req.body)
+var router = require('express').Router();
+var Users = require('../models/user');
+
+router.post('/auth/register', (req, res) => { 
+  req.body.password = Users.generateHash(req.body.password)
   Users.create(req.body)
     .then(user => {
       if(!user) {
         return res.status(401).send({error: 'Invalid username and/or password'})
       }
-      user.password = null // probably Mongoose doesn't let you delete the password!!
-      delete user.password // don't send the (hashed) password to the front-end
-      req.session.uid = user._id // save the userId into the session
+      user.password = null; // probably Mongoose doesn't let you delete the password!!
+      req.session.uid = user._id; // save the userId into the session
       res.send(user)
     })
     .catch( err => {
       res.status(401).send({error: 'Invalid username and/or password'}) // do not send the 'err' object back -- giving too much info to potential hackers!
     })
-})
+});
 router.post('/auth/login', (req, res) => {
   Users.findOne({email: req.body.email})
     .then( user => {
@@ -36,7 +34,7 @@ router.post('/auth/login', (req, res) => {
     .catch( err => {
       res.status(401).send({error: 'Invalid username and/or password'}) // do not send the 'err' object back -- giving too much info to potential hackers!
     })
-})
+});
 router.get('/auth/authenticate', (req, res) =>{
   Users.findById(req.session.uid)
     .then(user=>{
@@ -50,9 +48,9 @@ router.get('/auth/authenticate', (req, res) =>{
         error:err
       })
     })
-})
+});
 router.delete('/auth/logout', (req, res)=>{
   req.session.destroy()
   res.send("Successfully logged out")
-})
-module.exports = router
+});
+module.exports = router;

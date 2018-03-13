@@ -1,39 +1,53 @@
 <template>
     <div class="meet-friend">
-        <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyAPjJdiAmmeYPIveMMq-QfCZxx7m0VezsQ&q=initMap" allowfullscreen>
-        </iframe>
+        <!-- <iframe width="600" height="450" frameborder="0" style="border:0" v-bind:src="mapSrc" allowfullscreen>
+        </iframe> -->
+        <mapFriend :origin="this.trip.origin" :destination="this.trip.destination"></mapFriend>
         <div class="form">
-            <form @submit.prevent="getMap">
+            <form @submit.prevent="calcRoute(trip)">
                 <div class="form-group">
-                  <label for="your-location">Your Location</label>
-                  <input v-model="origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
+                    <label for="your-location">Your Location</label>
+                    <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
                 </div>
                 <div class="form-group">
-                  <label for="contacts-location">Your Contacts Location</label>
-                  <input v-model="destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address">
+                    <label for="contacts-location">Your Contacts Location</label>
+                    <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+            </form>
         </div>
     </div>
 </template>
 <script>
+    import mapFriend from "./MapFriend"
     export default {
-        name: 'Login',
+        name: 'MeetFriend',
         data() {
             return {
                 trip: {
                     origin: '',
-                    meetMeLocation: '',
                     destination: '',
                     travelMode: 'DRIVING'
                 }
             }
         },
         methods: {
-            calcRoute(){
+            calcRoute() {
+                debugger
+                this.trip.origin = this.trip.origin.split(' ').join('+')
+                this.trip.destination = this.trip.destination.split(' ').join('+')
                 this.$store.dispatch('calcRoute', this.trip)
+                this.trip.origin = ""
+                this.trip.destination = ""
             }
+        },
+        computed: {
+            // mapSrc() {
+            //     return this.$store.state.map
+            // }
+        },
+        components: {
+            mapFriend
         }
     }
 </script>

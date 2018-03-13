@@ -5,7 +5,7 @@ var schemaName = 'User';
 const SALT_FACTOR = 13;
 
 var schema = new Schema({
-    userName: { type: String },
+    username: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true, minlength: 6 }
 });

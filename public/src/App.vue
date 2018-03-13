@@ -5,11 +5,11 @@
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  import router from './router'
+  export default {
+    name: 'App'
+  }
 </script>
 
 <style>
-
 </style>

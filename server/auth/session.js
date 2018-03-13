@@ -7,10 +7,11 @@ var store = new mongoStore({
 store.on('error', function(err){
     console.log('[SESSION ERROR]', err)
 });
+
 var session = expressSession({
     secret: 'M3 Sw3r^3',
     cookie: {
-        maxAge: 1000*60*60*24*7*52
+      maxAge: 1000*60*60*24*7*52 // number of milliseconds in one year    
     },
     store,
     resave: true,
