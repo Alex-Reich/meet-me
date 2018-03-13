@@ -2,24 +2,23 @@
     <div class="meet-friend">
         <!-- <iframe width="600" height="450" frameborder="0" style="border:0" v-bind:src="mapSrc" allowfullscreen>
         </iframe> -->
-        <mapFriend :origin="this.trip.origin" :destination="this.trip.destination"></mapFriend>
+        <div class="map-friend" id="map"></div>
         <div class="form">
             <form @submit.prevent="calcRoute(trip)">
                 <div class="form-group">
                     <label for="your-location">Your Location</label>
                     <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="contacts-location">Your Contacts Location</label>
                     <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address">
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
 </template>
 <script>
-    import mapFriend from "./MapFriend"
     export default {
         name: 'MeetFriend',
         data() {
@@ -28,29 +27,75 @@
                     origin: '',
                     destination: '',
                     travelMode: 'DRIVING'
-                }
+                },
+                map: {},
+                service: '',
+                markerCoordinats: []
+            }
+        },
+        mounted() {
+            this.initMap()
+        },
+        watch: {
+            latitude: function(value) {
+                console.log("WATCHER VALUE", value)
+                this.initMap()
             }
         },
         methods: {
             calcRoute() {
-                debugger
                 this.trip.origin = this.trip.origin.split(' ').join('+')
                 this.trip.destination = this.trip.destination.split(' ').join('+')
-                this.$store.dispatch('calcRoute', this.trip)
-                this.trip.origin = ""
-                this.trip.destination = ""
-            }
-        },
-        computed: {
-            // mapSrc() {
-            //     return this.$store.state.map
+                // const element = document.getElementById('map')
+                // const options = {
+                //     zoom: 14,
+                //     center: new google.maps.LatLng(this.origin)
+                // }
+                // this.map = new google.maps.Map(element, options)
+                // const element = document.getElementById('map')
+                // this.$store.dispatch('calcRoute', this.trip)
+                // this.trip.origin = ""
+                // this.trip.destination = ""
+                this.$store.dispatch('calcRoute', this.trip);
+            },
+            initMap() {
+                const element = document.getElementById('map')
+                const options = {
+                    zoom: 14,
+                    center: new google.maps.LatLng(this.latitude, this.longitude)//possibly this.lat...
+                }
+                this.map = new google.maps.Map(element, options)
+            },
+            // getPlace() {
+            //     geocoder.geocode({ 'placeId': place.place_id }, function (results, status) {
+            //         if (status !== 'OK') {
+            //             window.alert('Geocoder failed due to: ' + status);
+            //             return;
+            //         }
+            //         map.setZoom(11);
+            //         map.setCenter(results[0].geometry.location);
+            //         // Set the position of the marker using the place ID and location.
+            //         marker.setPlace({
+            //             placeId: place.place_id,
+            //             location: results[0].geometry.location
+            //         });
+            //         marker.setVisible(true);
+            //     })
             // }
         },
-        components: {
-            mapFriend
+        computed: {
+            latitude() {
+                return this.$store.state.options.lat
+            },
+            longitude() {
+                return this.$store.state.options.lng
+            }
         }
     }
 </script>
 <style scoped>
-
+    #map {
+        height: 600px;
+        width: 450px;
+    }
 </style>
