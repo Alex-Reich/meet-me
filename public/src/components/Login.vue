@@ -105,5 +105,11 @@
         background-position: center;
         background-size: cover;
         height: 100vh;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    p{
+        color: white;
     }
 </style>
