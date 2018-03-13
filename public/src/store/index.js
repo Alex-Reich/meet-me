@@ -8,10 +8,15 @@ var auth = axios.create({
     timeout: 3000
 });
 
-var location = axios.create({
+var place = axios.create({
     baseURL: "https://www.google.com/maps/embed/v1/search?key=AIzaSyAPjJdiAmmeYPIveMMq-QfCZxx7m0VezsQ&q=",
     timeout: 3000
 });
+
+var direction = axios.create({
+    baseURL: "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAPjJdiAmmeYPIveMMq-QfCZxx7m0VezsQ&origin=",
+    timeout: 3000
+})
 
 vue.use(vuex);
 

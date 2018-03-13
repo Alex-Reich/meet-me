@@ -5,7 +5,22 @@
     </div>
 </template>
 <script>
-
+    export default {
+        name: 'Login',
+        data() {
+            return {
+                trip: {
+                    origin: '',
+                    destination: '',
+                    travelMode: 'DRIVING'
+                }
+            }
+        },
+        methods: {
+            
+        }
+    }
 </script>
 <style scoped>
+
 </style>
