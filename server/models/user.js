@@ -1,10 +1,11 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
-var Schema = mongoose.Schema;
-var schemaName = 'User';
-var ObjectId = mongoose.SchemaTypes.ObjectId
+var mongoose = require('mongoose')
+var bcrypt = require('bcryptjs')
+var Schema = mongoose.Schema
+var schemaName = "User"
+const SALT_FACTOR = 13
 
-const SALT_FACTOR = 13;
+
+
 
 var schema = new Schema({
     username: { type: String },
