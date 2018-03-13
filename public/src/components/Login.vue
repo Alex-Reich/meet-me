@@ -1,6 +1,6 @@
 <template>
-    <div class="login">
-        <div class="container-fluid">
+    <div class="background">
+        <div class="container-fluid background">
             <div>
                 <img src="../assets/meet-me-logo.png" height="200">
                 <p>
@@ -100,7 +100,7 @@
     }
 </script>
 <style scoped>
-    .login {
+    .background {
         background-image: url("../assets/bg-meet-me.jpg");
         background-position: center;
         background-size: cover;
@@ -109,7 +109,7 @@
         justify-content: center;
         text-align: center;
     }
-
+    
     p {
         color: white;
     }

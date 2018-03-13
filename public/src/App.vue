@@ -1,15 +1,16 @@
 <template>
-  <div id="app">
+  <div id="home">
     <router-view/>
   </div>
 </template>
 
 <script>
-  import router from './router'
-  export default {
-    name: 'App'
-  }
+    import router from './router'
+    export default {
+        name: 'Home'
+    }
 </script>
 
 <style>
+
 </style>
