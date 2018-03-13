@@ -13,7 +13,7 @@ var place = axios.create({
     timeout: 3000
 });
 
-var direction = axios.create({
+var directions = axios.create({
     baseURL: "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAPjJdiAmmeYPIveMMq-QfCZxx7m0VezsQ&origin=",
     timeout: 3000
 })
@@ -28,6 +28,13 @@ export default new vuex.Store({
 
     }, 
     actions: {
+        //direction actions
+        calcRoute({commit, dispatch}, payload){
+            directions.get(payload.origin+"&destination="+payload.destination).then(res =>{
+                commit("setMap", res)
+            })
+        },
+        //user actions
         createUser({ commit, dispatch }, payload) {
             auth.post("register", payload).then(res => {
                 commit('updateUser', res.data.user)

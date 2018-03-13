@@ -35,11 +35,11 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn submitBtn">
-                                        <b>Create User</b>
-                                    </button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                         <b>close</b>
+                                    </button>
+                                    <button type="submit" class="btn submitBtn">
+                                        <b>Create User</b>
                                     </button>
                                 </div>
                             </form>
@@ -92,7 +92,7 @@
                 this.$store.dispatch('login', this.user)
                 $('#login').modal('hide')
             },
-            createUser() {
+            createUser(createdUser) {
                 this.$store.dispatch('createUser', this.createdUser)
                 $('#signup').modal('hide')
             }
@@ -109,7 +109,8 @@
         justify-content: center;
         text-align: center;
     }
-    p{
+
+    p {
         color: white;
     }
 </style>
