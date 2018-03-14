@@ -13,6 +13,7 @@
             </button>
         </div>
           <h1>Welcome to "Meet Me @..."</h1>
+          <div class="row spacer"></div>
           <img src="../assets/meet-me-logo.png" height="200">
           <!-- <p>
               <strong>Please sign up or login to continue.</strong>
@@ -24,11 +25,12 @@
               <b>Login</b>
           </button> -->
       </div>
-      <div class="row d-flex justify-content-center align-self-center">
-        <div class="colfmt col-lg-4">
+      <div class="row spacer"></div>
+      <div class="row d-flex justify-content-center ">
+        <div class="colfmt align-items-center justify-content-center col-lg-4 m-4">
           <h2>Meet a Friend</h2>
         </div>
-        <div class="colfmt align-self-center col-lg-4"><h2>Plan a Trip</h2></div>
+        <div class="colfmt align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
       </div>
   </div>
   </div>
@@ -55,20 +57,20 @@
         align-items: center;
         justify-content: center;
         text-align: center;
+        color: white;
     }
     
     .colfmt {
-        color: white;
         border: 2px solid white;
-        min-height: 30vh;
+        min-height: 20vh;
+        background-color: steelblue;
     }
     
-    p {
-        color: white;
+    h1 {
+        font-size: 48pt;
     }
     
-    h1,
-    h2 {
-        color: White;
+    .spacer {
+        min-height: 100px;
     }
 </style>
