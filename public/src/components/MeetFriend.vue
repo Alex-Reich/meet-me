@@ -12,11 +12,11 @@
                         <form @submit.prevent="getTrip(trip)">
                             <div class="form-group">
                                 <label for="your-location">Your Location</label>
-                                <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
+                                <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address" required>
                             </div>
                             <div class="form-group">
                                 <label for="contacts-location">Your Contacts Location</label>
-                                <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address">
+                                <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
@@ -66,12 +66,14 @@
                 // this.trip.destination = ""
                 this.$store.dispatch('getTripOrigin', this.trip);
                 this.$store.dispatch('getTripDestination', this.trip);
+                // this.trip.orgin = '';
+                // this.trip.destination = '';
             },
-            initMap() {
+            initMap() { // STARTING PLACEHOLDER MAP
                 const element = document.getElementById('map')
                 const options = {
-                    zoom: 8,
-                    center: new google.maps.LatLng(this.originLatitude, this.originLongitude)
+                    zoom: 15,
+                    center: {lat: 43.6187102, lng: -116.2146068} // BOISE ID
                 }
                 this.map = new google.maps.Map(element, options);
             },
@@ -84,7 +86,7 @@
                     center: this.bound,
                     mapTypeId: google.maps.MapTypeId.ROADMAP
                 }
-                this.map = new google.maps.Map(element, options);
+                this.map = new google.maps.Map(element, options); // CREATES NEW MAP
 
                 this.addMarker(start, this.map)
                 this.addMarker(end, this.map)
@@ -92,15 +94,19 @@
                 this.map.fitBounds(bound)
                 var center = this.map.getCenter()
                 this.map.setCenter({lat: center.lat(), lng: center.lng()})
+                this.getDistance(start, end)
                 this.addMarker({lat: center.lat(), lng: center.lng()}, this.map)
                 console.log("lat", center)
             },
-            addMarker(location, map) {
+            addMarker(location, map) { // CREATES MARKERS
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map
                 })
             },
+            getDistance(start, end){
+                this.$store.dispatch('getDistance', {orgin: start, destination: end})
+            }
             // bounds(){
             //     var bound = new google.maps.LatLngBounds()
             // }
