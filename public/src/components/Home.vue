@@ -27,10 +27,10 @@
       </div>
       <div class="row spacer"></div>
       <div class="row d-flex justify-content-center ">
-        <div class="colfmt align-items-center justify-content-center col-lg-4 m-4">
+        <div class="colfmt d-flex align-items-center justify-content-center col-lg-4 m-4">
           <h2>Meet a Friend</h2>
         </div>
-        <div class="colfmt align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
+        <div class="colfmt d-flex align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
       </div>
   </div>
   </div>
