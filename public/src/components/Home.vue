@@ -12,6 +12,7 @@
                 <b>Login</b>
             </button>
         </div>
+        <div class="row spacer"></div>
           <h1>Welcome to "Meet Me @..."</h1>
           <div class="row spacer"></div>
           <img src="../assets/meet-me-logo.png" height="200">
@@ -33,16 +34,33 @@
         <div class="colfmt d-flex align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
       </div>
   </div>
+  <login></login>
   </div>
 </template>
 
 <script>
+    import Login from './Login'
     export default {
         name: 'Home',
         data() {
             return {
-
+                user: {},
+                createdUser: {}
             }
+        },
+        methods: {
+            login() {
+                this.$store.dispatch('login', this.user)
+                $('#login').modal('hide')
+            },
+            createUser(createdUser) {
+                debugger
+                this.$store.dispatch('createUser', this.createdUser)
+                $('#signup').modal('hide')
+            }
+        },
+        components: {
+            Login
         }
     }
 </script>
@@ -71,6 +89,6 @@
     }
     
     .spacer {
-        min-height: 100px;
+        min-height: 75px;
     }
 </style>

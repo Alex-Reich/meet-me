@@ -66,6 +66,7 @@ export default new vuex.Store({
             vue.set(state.voyage.destination, "lng", payload.lng)
         },
         updateUser(state, payload) {
+            debugger
             state.user = payload
         },
         setMidway(state, payload){
@@ -108,7 +109,7 @@ export default new vuex.Store({
             distanceAPI.get(payload.orgin.lat + ',' + payload.orgin.lng + '&destinations=' + payload.destination.lat + ',' + payload.destination.lng + apiKey)
                 .then(res => {
                     console.log('DISTANCE DATA:', res.data)
-                    // dispatch distance to another function that 
+                        // dispatch distance to another function that 
                 })
         },
         getPlaces({ commit, dispatch }, payload) {

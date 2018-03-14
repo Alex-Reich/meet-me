@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
     <div class="map-friend" id="map">
 
     </div>
@@ -35,4 +35,4 @@
         height: 600px;
         width: 450px;
     }
-</style> -->
+</style>

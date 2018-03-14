@@ -21,17 +21,6 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
-                    <form v-on:change="submitPlace()">
-                        <select class="form-control form-control-sm" v-model="type">
-                            <option value="" disabled>Choose Category</option>
-                            <option value="cafe">Coffee Shops</option>
-                            <option value="restaurant">Restaurants</option>
-                            <option value="bar">Bars</option>
-                            <option value="bakery">Bakeries</option>
-                            <option value="park">Parks</option>
-                            <option value="bowling_alley">Bowling Alleys</option>
-                        </select>
-                    </form>
                 </div>
             </div>
         </div>
@@ -45,9 +34,8 @@
                 trip: {
                     origin: '',
                     destination: '',
+                    travelMode: 'DRIVING'
                 },
-                type: '',
-                choose: 'Choose Category',
                 map: {},
                 markerCoordinats: [],
                 midwayPoint: {}
@@ -146,6 +134,25 @@
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
             }
+            // bounds(){
+            //     var bound = new google.maps.LatLngBounds()
+            // }
+            // getPlace() {
+            //     geocoder.geocode({ 'placeId': place.place_id }, function (results, status) {
+            //         if (status !== 'OK') {
+            //             window.alert('Geocoder failed due to: ' + status);
+            //             return;
+            //         }
+            //         map.setZoom(11);
+            //         map.setCenter(results[0].geometry.location);
+            //         // Set the position of the marker using the place ID and location.
+            //         marker.setPlace({
+            //             placeId: place.place_id,
+            //             location: results[0].geometry.location
+            //         });
+            //         marker.setVisible(true);
+            //     })
+            // }
         },
         computed: {
             midway(){
@@ -156,7 +163,7 @@
 </script>
 <style scoped>
     #map {
-        height: 50vh;
-        width: 100%;
+        height: 600px;
+        width: 800px;
     }
 </style>

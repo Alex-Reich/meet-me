@@ -2,18 +2,6 @@
     <div class="background">
         <div class="container-fluid background">
             <div>
-                <img src="../assets/meet-me-logo.png" height="200">
-                <p>
-                    <strong>Please sign up or login to continue.</strong>
-                </p>
-                <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
-                    <b>Sign Up</b>
-                </button>
-                <button type="button" class="btn loginBtn m-2" data-toggle="modal" data-target="#login">
-                    <b>Login</b>
-                </button>
-            </div>
-            <div>
                 <!-- Sign Up Modal Start -->
                 <div class="modal fade" id="signUp" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered" role="document">
