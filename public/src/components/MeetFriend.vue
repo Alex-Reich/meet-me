@@ -49,14 +49,12 @@
                 type: '',
                 choose: 'Choose Category',
                 map: {},
-                service: '',
                 markerCoordinats: [],
-                midwayPoint: {},
-                resetFlag: false
+                midwayPoint: {}
             }
         },
         mounted() {
-            // this.initMap()
+            this.initMap()
         },
         methods: {
             getTrip() {
@@ -65,28 +63,27 @@
                 Promise.all([
                     this.$store.dispatch('getTripOrigin', this.trip),
                     this.$store.dispatch('getTripDestination', this.trip)
-                ]).then((results)=>{
+                ]).then((results) => {
                     console.log('mapping results')
                     this.setMap(results[0], results[1])
-                }).catch(err=>{
+                }).catch(err => {
                     console.log(err)
                 })
                 // this.trip.orgin = '';
                 // this.trip.destination = '';
             },
-            // initMap() { // STARTING PLACEHOLDER MAP
-            //     const element = document.getElementById('map')
-            //     const options = {
-            //         zoom: 15,
-            //         center: { lat: 43.6187102, lng: -116.2146068 } // BOISE ID
-            //     }
-            //     this.map = new google.maps.Map(element, options);
-            // },
+            initMap() { // STARTING PLACEHOLDER MAP
+                const element = document.getElementById('map')
+                const options = {
+                    zoom: 15,
+                    center: { lat: 43.6187102, lng: -116.2146068 } // BOISE ID
+                }
+                this.map = new google.maps.Map(element, options);
+            },
             setMap(origin, destination) {
                 var start = { lat: origin.lat, lng: origin.lng }
                 var end = { lat: destination.lat, lng: destination.lng }
                 console.log('VOYAGE', start)
-                // const  bound = new google.maps.LatLngBounds(start, end)
                 var bounds = new google.maps.LatLngBounds()
                 bounds.extend(start);
                 bounds.extend(end)
@@ -94,9 +91,8 @@
                 const options = {
                     zoom: Math.ceil(Math.log2($(window).width())) - 8,
                     minZoom: 1,
-                    center: (start, end),
+                    center: this.bounds,
                     mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    scrollwheel: false
                 }
                 this.map = new google.maps.Map(element, options); // CREATES NEW MAP
 
@@ -104,26 +100,33 @@
                 this.addMarker(end, this.map)
 
                 this.map.fitBounds(bounds)
-                // var center = this.map.getCenter()
-                // this.map.setCenter({ lat: center.lat(), lng: center.lng() })
-                // this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
-                // this.getDistance(start, end)
-                // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
-            },
-            getPlaces() {
-                //     map = new google.maps.Map(document.getElementById('map'), {
-                //         center: pyrmont,
-                //         zoom: 15
-                //     });
+                var center = this.map.getCenter()
+                this.map.setCenter({ lat: center.lat(), lng: center.lng() })
+                this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
 
-                //     var request = {
-                //         location: pyrmont,
-                //         radius: '500',
-                //         query: 'restaurant'
-                //     };
-                //     service = new google.maps.places.PlacesService(map);
-                //     service.textSearch(request, callback);
-                // }
+                this.$store.commit('setMidway', { lat: center.lat(), lng: center.lng() })
+                // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
+                // this.getDistance(start, end)
+            },
+            submitPlace() {
+                this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type })
+
+            },
+            getPlaces(midway) {
+                
+                // debugger
+                // map = new google.maps.Map(document.getElementById('map'), {
+                //     center: pyrmont,
+                //     zoom: 15
+                // });
+
+                var request = {
+                    location: pyrmont,
+                    radius: '500',
+                    type: 'restaurant'
+                };
+                service = new google.maps.places.PlacesService(map);
+                service.textSearch(request, callback);
 
             },
             addMarker(location, map) { // CREATES MARKERS
@@ -136,37 +139,18 @@
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    color: purple
+                    draggable: true
+
                 })
             },
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
-            },
-            submitPlace(){
-                this.$store.dispatch('getPlaces', {midway: this.midwayPoint, category: this.type})              
-                console.log(this.midwayPoint)
-                console.log(this.type)
             }
         },
         computed: {
-            origin(){
-                return this.$store.state.voyage.orgin
-            },
-            destination(){
-                return this.$store.state.voyage.destination
+            midway(){
+                return this.$store.state.midway
             }
-            // originLatitude() {
-            //     return this.$store.state.origin.lat
-            // },
-            // originLongitude() {
-            //     return this.$store.state.origin.lng
-            // },
-            // destinationLatitude() {
-            //     return this.$store.state.destination.lat
-            // },
-            // destinationLongitude() {
-            //     return this.$store.state.destination.lng
-            // }
         }
     }
 </script>

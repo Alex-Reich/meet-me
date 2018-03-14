@@ -10,8 +10,13 @@ var geocode = axios.create({
     // timeout: 3000
 });
 
+var serverAPI = axios.create({
+    baseURL: "localhost:3000/api",
+    timeout: 3000
+})
+
 var placesAPI = axios.create({
-    baseURL: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=',
+    baseURL: 'https://maps.googleapis.com/maps/api/place/nearbysearch',
     timeout: 3000
 })
 
@@ -43,6 +48,7 @@ export default new vuex.Store({
                 lng: 0
             }
         },
+        midway: {},
         options: []
     },
     modules: {
@@ -61,18 +67,19 @@ export default new vuex.Store({
         },
         updateUser(state, payload) {
             state.user = payload
+        },
+        setMidway(state, payload){
+            console.log('setMIDWAY,', payload)
+            state.midway = payload
         }
     },
     actions: {
         //direction actions
         getTripOrigin({ commit, dispatch }, payload) {
-            console.log("ORIGIN ACTION", payload)
             return new Promise((resolve, reject)=>{
                 geocode.get(payload.origin + apiKey).then(res => {
                     var data = res.data.results[0].geometry.location
-                    console.log("ORIGIN DATA", data)
                     commit('setMapOrigin', { lat: data.lat, lng: data.lng })
-                    console.log('sending origin')
                     resolve({ lat: data.lat, lng: data.lng })
                 })
                     .catch(error => {
@@ -82,13 +89,10 @@ export default new vuex.Store({
             })
         },
         getTripDestination({ commit, dispatch }, payload) {
-            console.log("DESTINATION ACTION", payload)
             return new Promise((resolve, reject)=>{
                 geocode.get(payload.destination + apiKey).then(res => {
                     var data = res.data.results[0].geometry.location
-                    console.log("DESITNATION DATA", data)
                     commit('setMapDestination', { lat: data.lat, lng: data.lng })
-                    console.log('sending destination')
                     resolve({ lat: data.lat, lng: data.lng })
                 })
                     .catch(error => {
@@ -108,8 +112,20 @@ export default new vuex.Store({
                 })
         },
         getPlaces({ commit, dispatch }, payload) {
-            console.log('GETPALCES PAYLOAD', payload)
-            // placesAPI.get( '&rankby=distance&types=')
+            serverAPI.get('google', payload)
+                .then(res => {
+                    console.log('GOOGLE PLACES RESULTS', res)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            // placesAPI.get('json?location='+payload.midway.lat + ',' + payload.midway.lng + '&rankby=distance&types=' + payload.category + apiKey)
+            //     .then(res => {
+            //         console.log('GOOGLE PLACES RESULTS', res)
+            //     })
+            //     .catch(err => {
+            //         console.log(err)
+            //     })
         }
     }
 });
