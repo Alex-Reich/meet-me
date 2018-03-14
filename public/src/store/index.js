@@ -5,7 +5,8 @@ import router from '../router/index';
 
 var auth = axios.create({
     baseURL: "//localhost:3000/auth/",
-    // timeout: 3000
+    timeout: 3000,
+    withCredentials: true
 });
 
 var geocode = axios.create({
@@ -48,8 +49,8 @@ export default new vuex.Store({
             console.log("this is our SETMAP PAYLOAD ORIGIN!", payload)
             vue.set(state.origin, "lat", payload.lat)
             vue.set(state.origin, "lng", payload.lng)
-            // state.options.lat = payload.lat;
-            // state.options.lng = payload.lng;
+                // state.options.lat = payload.lat;
+                // state.options.lng = payload.lng;
         },
         setMapDestination(state, payload) {
             console.log("this is our SETMAP PAYLOAD DESTINATION!", payload)
@@ -57,6 +58,7 @@ export default new vuex.Store({
             vue.set(state.destination, "lng", payload.lng)
         },
         updateUser(state, payload) {
+            debugger
             state.user = payload
         }
     },
@@ -65,11 +67,11 @@ export default new vuex.Store({
         getTripOrigin({ commit, dispatch }, payload) {
             console.log("ORIGIN ACTION", payload)
             geocode.get(payload.origin + apiKey).then(res => {
-                console.log(res)
-                var data = res.data.results[0].geometry.location
-                console.log("THIS IS DATA FROM CALCROUTE", data)
-                commit('setMapOrigin', { lat: data.lat, lng: data.lng })
-            })
+                    console.log(res)
+                    var data = res.data.results[0].geometry.location
+                    console.log("THIS IS DATA FROM CALCROUTE", data)
+                    commit('setMapOrigin', { lat: data.lat, lng: data.lng })
+                })
                 .catch(error => {
                     console.log(error)
                 })
@@ -77,40 +79,43 @@ export default new vuex.Store({
         getTripDestination({ commit, dispatch }, payload) {
             console.log("DESTINATION ACTION", payload)
             geocode.get(payload.destination + apiKey).then(res => {
-                console.log(res)
-                var data = res.data.results[0].geometry.location
-                console.log("THIS IS DATA FROM CALCROUTE DEST.", data)
-                commit('setMapDestination', { lat: data.lat, lng: data.lng })
-            })
+                    console.log(res)
+                    var data = res.data.results[0].geometry.location
+                    console.log("THIS IS DATA FROM CALCROUTE DEST.", data)
+                    commit('setMapDestination', { lat: data.lat, lng: data.lng })
+                })
                 .catch(error => {
                     console.log(error)
                 })
-            // commit('setMap', geocode + payload.origin + apiKey)
+                // commit('setMap', geocode + payload.origin + apiKey)
         },
         getDistance({ commit, dispatch }, payload) {
 
             distanceAPI.get(payload.orgin.lat + ',' + payload.orgin.lng + '&destinations=' + payload.destination.lat + ',' + payload.destination.lng + apiKey)
                 .then(res => {
                     console.log('DISTANCE DATA:', res.data)
-                    // dispatch distance to another function that 
+                        // dispatch distance to another function that 
                 })
         },
 
         //region user actions
         createUser({ commit, dispatch }, payload) {
-            auth.post("register", payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
+            debugger
+            auth.post("register", payload)
+                .then(res => {
+                    var newUser = res.data
+                    commit('updateUser', newUser)
+                    router.push({ name: 'Home' })
+                })
                 .catch(err => {
                     console.log(err)
                 })
         },
         login({ commit, dispatch }, payload) {
             auth.post('login', payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
+                    commit('updateUser', res.data.user)
+                    router.push({ name: 'Home' })
+                })
                 .catch(err => {
                     console.log('Invalid Username or Password')
                 })
@@ -118,8 +123,8 @@ export default new vuex.Store({
         },
         authenticate({ commit, dispatch }, payload) {
             auth.get('authenticate', payload).then(res => {
-                commit('updateUser', res.data)
-            })
+                    commit('updateUser', res.data)
+                })
                 .catch(err => {
                     console.log(err)
                 })

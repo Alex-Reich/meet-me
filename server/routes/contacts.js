@@ -3,11 +3,11 @@ var Contacts = require("../models/contact")
 
 //  Create a Contact
 router.post("/api/contacts", (req, res, next) => {
-    req.body.userId = req.session.uid
-    req.body.created = Date.now()
+
+    // req.body.userId = req.session.uid
     Contacts.create(req.body)
-        .then(comment => {
-            res.send(comment)
+        .then(contact => {
+            res.send(contact)
         })
         .catch(next)
 })

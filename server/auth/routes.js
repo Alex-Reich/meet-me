@@ -4,6 +4,7 @@ var errorMessage = { error: 'Invalid Username and/or Password' }
 
 //You never create a route like '/api/users' -- except perhaps for a priveledged admin user
 router.post('/auth/register', (req, res) => { // never call 'next' inside an auth route!
+
     req.body.password = Users.generateHash(req.body.password) // don't bother with a confirmPassword on backend -- use that for front-end validation
     console.log(req.body)
     Users.create(req.body)
