@@ -5,6 +5,9 @@
     <div class="container-fluid">
       <div>
         <div class="row d-flex justify-content-end">
+                <button type="button" class="btn mgContactBtn m-2" data-toggle="modal" data-target="#contacts">
+                        <b>Manage Contacts</b>
+                    </button>            
             <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
                 <b>Sign Up</b>
             </button>
@@ -16,15 +19,7 @@
           <h1>Welcome to "Meet Me @..."</h1>
           <div class="row spacer"></div>
           <img src="../assets/meet-me-logo.png" height="200">
-          <!-- <p>
-              <strong>Please sign up or login to continue.</strong>
-          </p>
-          <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
-              <b>Sign Up</b>
-          </button>
-          <button type="button" class="btn loginBtn m-2" data-toggle="modal" data-target="#login">
-              <b>Login</b>
-          </button> -->
+
       </div>
       <div class="row spacer"></div>
       <div class="row d-flex justify-content-center ">
@@ -35,11 +30,13 @@
       </div>
   </div>
   <login></login>
+  <contacts></contacts>
   </div>
 </template>
 
 <script>
     import Login from './Login'
+    import Contacts from './Contacts'
     export default {
         name: 'Home',
         data() {
@@ -47,6 +44,10 @@
                 user: {},
                 createdUser: {}
             }
+        },
+        components: {
+            login: Login,
+            contacts: Contacts
         },
         methods: {
             login() {
@@ -57,11 +58,13 @@
                 debugger
                 this.$store.dispatch('createUser', this.createdUser)
                 $('#signup').modal('hide')
+            },
+            manageContacts() {
+                $('#contacts').modal('hide')
             }
-        },
-        components: {
-            Login
+
         }
+
     }
 </script>
 
