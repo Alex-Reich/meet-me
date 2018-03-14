@@ -2,16 +2,18 @@ import vue from 'vue';
 import vuex from 'vuex';
 import axios from 'axios';
 import router from '../router/index';
+import authStore from './auth-store'
 
-var auth = axios.create({
-    baseURL: "//localhost:3000/auth/",
-    // timeout: 3000
-});
 
 var geocode = axios.create({
     baseURL: "https://maps.googleapis.com/maps/api/geocode/json?address=",
     // timeout: 3000
 });
+
+var placesAPI = axios.create({
+    baseURL: 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=',
+    timeout: 3000
+})
 
 // var directions = axios.create({
 //     baseURL: "https://www.google.com/maps/embed/v1/directions?key=AAIzaSyDncWlc5Zb37QYDvrCT88Dybb6KsHwZ9HQ&origin=",
@@ -27,34 +29,35 @@ var baseMap = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyCRj2cId
 
 vue.use(vuex);
 
-
-
 export default new vuex.Store({
     state: {
         user: {},
         map: {},
-        origin: {
-            lat: 43,
-            lng: -116
-        },
-        destination: {
-            lat: 43,
-            lng: -116
+        voyage: {
+            origin: {
+                lat: 0,
+                lng: 0
+            },
+            destination: {
+                lat: 0,
+                lng: 0
+            }
         },
         options: []
+    },
+    modules: {
+        authStore
     },
     mutations: {
         setMapOrigin(state, payload) {
             console.log("this is our SETMAP PAYLOAD ORIGIN!", payload)
-            vue.set(state.origin, "lat", payload.lat)
-            vue.set(state.origin, "lng", payload.lng)
-            // state.options.lat = payload.lat;
-            // state.options.lng = payload.lng;
+            vue.set(state.voyage.origin, "lat", payload.lat)
+            vue.set(state.voyage.origin, "lng", payload.lng)
         },
         setMapDestination(state, payload) {
             console.log("this is our SETMAP PAYLOAD DESTINATION!", payload)
-            vue.set(state.destination, "lat", payload.lat)
-            vue.set(state.destination, "lng", payload.lng)
+            vue.set(state.voyage.destination, "lat", payload.lat)
+            vue.set(state.voyage.destination, "lng", payload.lng)
         },
         updateUser(state, payload) {
             state.user = payload
@@ -64,28 +67,37 @@ export default new vuex.Store({
         //direction actions
         getTripOrigin({ commit, dispatch }, payload) {
             console.log("ORIGIN ACTION", payload)
-            geocode.get(payload.origin + apiKey).then(res => {
-                console.log(res)
-                var data = res.data.results[0].geometry.location
-                console.log("THIS IS DATA FROM CALCROUTE", data)
-                commit('setMapOrigin', { lat: data.lat, lng: data.lng })
-            })
-                .catch(error => {
-                    console.log(error)
+            return new Promise((resolve, reject)=>{
+                geocode.get(payload.origin + apiKey).then(res => {
+                    var data = res.data.results[0].geometry.location
+                    console.log("ORIGIN DATA", data)
+                    commit('setMapOrigin', { lat: data.lat, lng: data.lng })
+                    console.log('sending origin')
+                    resolve({ lat: data.lat, lng: data.lng })
                 })
+                    .catch(error => {
+                        console.log(error)
+                        reject()
+                    })
+            })
         },
         getTripDestination({ commit, dispatch }, payload) {
             console.log("DESTINATION ACTION", payload)
-            geocode.get(payload.destination + apiKey).then(res => {
-                console.log(res)
-                var data = res.data.results[0].geometry.location
-                console.log("THIS IS DATA FROM CALCROUTE DEST.", data)
-                commit('setMapDestination', { lat: data.lat, lng: data.lng })
-            })
-                .catch(error => {
-                    console.log(error)
+            return new Promise((resolve, reject)=>{
+                geocode.get(payload.destination + apiKey).then(res => {
+                    var data = res.data.results[0].geometry.location
+                    console.log("DESITNATION DATA", data)
+                    commit('setMapDestination', { lat: data.lat, lng: data.lng })
+                    console.log('sending destination')
+                    resolve({ lat: data.lat, lng: data.lng })
                 })
-            // commit('setMap', geocode + payload.origin + apiKey)
+                    .catch(error => {
+                        console.log(error)
+                        reject()
+                    })
+                // commit('setMap', geocode + payload.origin + apiKey)
+
+            })
         },
         getDistance({ commit, dispatch }, payload) {
 
@@ -95,45 +107,9 @@ export default new vuex.Store({
                     // dispatch distance to another function that 
                 })
         },
-
-        //region user actions
-        createUser({ commit, dispatch }, payload) {
-            auth.post("register", payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-        login({ commit, dispatch }, payload) {
-            auth.post('login', payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
-                .catch(err => {
-                    console.log('Invalid Username or Password')
-                })
-
-        },
-        authenticate({ commit, dispatch }, payload) {
-            auth.get('authenticate', payload).then(res => {
-                commit('updateUser', res.data)
-            })
-                .catch(err => {
-                    console.log(err)
-                })
-        },
-        logout({ commit, dispatch }, payload) {
-            auth.delete('logout')
-                .then(res => {
-                    commit('updateUser', {})
-                    dispatch('authenticate', payload)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+        getPlaces({ commit, dispatch }, payload) {
+            console.log('GETPALCES PAYLOAD', payload)
+            // placesAPI.get( '&rankby=distance&types=')
         }
-        //endregion
     }
 });

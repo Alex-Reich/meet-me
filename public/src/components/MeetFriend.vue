@@ -21,6 +21,17 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+                    <form v-on:change="submitPlace()">
+                        <select class="form-control form-control-sm" v-model="type">
+                            <option value="" disabled>Choose Category</option>
+                            <option value="cafe">Coffee Shops</option>
+                            <option value="restaurant">Restaurants</option>
+                            <option value="bar">Bars</option>
+                            <option value="bakery">Bakeries</option>
+                            <option value="park">Parks</option>
+                            <option value="bowling_alley">Bowling Alleys</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
@@ -34,69 +45,86 @@
                 trip: {
                     origin: '',
                     destination: '',
-                    travelMode: 'DRIVING'
                 },
+                type: '',
+                choose: 'Choose Category',
                 map: {},
                 service: '',
-                markerCoordinats: []
+                markerCoordinats: [],
+                midwayPoint: {},
+                resetFlag: false
             }
         },
         mounted() {
-            this.initMap()
-        },
-        watch: {
-            originLatitude: function (value) {
-                console.log("WATCHER VALUE", value)
-                this.setMap()
-            }
+            // this.initMap()
         },
         methods: {
             getTrip() {
                 this.trip.origin = this.trip.origin.split(' ').join('+')
                 this.trip.destination = this.trip.destination.split(' ').join('+')
-                // const element = document.getElementById('map')
-                // const options = {
-                //     zoom: 14,
-                //     center: new google.maps.LatLng(this.origin)
-                // }
-                // this.map = new google.maps.Map(element, options)
-                // const element = document.getElementById('map')
-                // this.$store.dispatch('calcRoute', this.trip)
-                // this.trip.origin = ""
-                // this.trip.destination = ""
-                this.$store.dispatch('getTripOrigin', this.trip);
-                this.$store.dispatch('getTripDestination', this.trip);
+                Promise.all([
+                    this.$store.dispatch('getTripOrigin', this.trip),
+                    this.$store.dispatch('getTripDestination', this.trip)
+                ]).then((results)=>{
+                    console.log('mapping results')
+                    this.setMap(results[0], results[1])
+                }).catch(err=>{
+                    console.log(err)
+                })
                 // this.trip.orgin = '';
                 // this.trip.destination = '';
             },
-            initMap() { // STARTING PLACEHOLDER MAP
-                const element = document.getElementById('map')
+            // initMap() { // STARTING PLACEHOLDER MAP
+            //     const element = document.getElementById('map')
+            //     const options = {
+            //         zoom: 15,
+            //         center: { lat: 43.6187102, lng: -116.2146068 } // BOISE ID
+            //     }
+            //     this.map = new google.maps.Map(element, options);
+            // },
+            setMap(origin, destination) {
+                var start = { lat: origin.lat, lng: origin.lng }
+                var end = { lat: destination.lat, lng: destination.lng }
+                console.log('VOYAGE', start)
+                // const  bound = new google.maps.LatLngBounds(start, end)
+                var bounds = new google.maps.LatLngBounds()
+                bounds.extend(start);
+                bounds.extend(end)
+                const element = document.getElementById('map') // SEt MAP TO id="map" FROM ABOVE DIV
                 const options = {
-                    zoom: 15,
-                    center: {lat: 43.6187102, lng: -116.2146068} // BOISE ID
-                }
-                this.map = new google.maps.Map(element, options);
-            },
-            setMap() {
-                var start = { lat: this.originLatitude, lng: this.originLongitude }
-                var end = { lat: this.destinationLatitude, lng: this.destinationLongitude }
-                const bound = new google.maps.LatLngBounds(start, end)
-                const element = document.getElementById('map')
-                const options = {
-                    center: this.bound,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                    zoom: Math.ceil(Math.log2($(window).width())) - 8,
+                    minZoom: 1,
+                    center: (start, end),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    scrollwheel: false
                 }
                 this.map = new google.maps.Map(element, options); // CREATES NEW MAP
 
                 this.addMarker(start, this.map)
                 this.addMarker(end, this.map)
 
-                this.map.fitBounds(bound)
-                var center = this.map.getCenter()
-                this.map.setCenter({lat: center.lat(), lng: center.lng()})
-                this.getDistance(start, end)
-                this.addMarker({lat: center.lat(), lng: center.lng()}, this.map)
-                console.log("lat", center)
+                this.map.fitBounds(bounds)
+                // var center = this.map.getCenter()
+                // this.map.setCenter({ lat: center.lat(), lng: center.lng() })
+                // this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
+                // this.getDistance(start, end)
+                // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
+            },
+            getPlaces() {
+                //     map = new google.maps.Map(document.getElementById('map'), {
+                //         center: pyrmont,
+                //         zoom: 15
+                //     });
+
+                //     var request = {
+                //         location: pyrmont,
+                //         radius: '500',
+                //         query: 'restaurant'
+                //     };
+                //     service = new google.maps.places.PlacesService(map);
+                //     service.textSearch(request, callback);
+                // }
+
             },
             addMarker(location, map) { // CREATES MARKERS
                 var marker = new google.maps.Marker({
@@ -104,48 +132,47 @@
                     map: map
                 })
             },
-            getDistance(start, end){
-                this.$store.dispatch('getDistance', {orgin: start, destination: end})
+            midwayMarker(location, map) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    color: purple
+                })
+            },
+            getDistance(start, end) {
+                this.$store.dispatch('getDistance', { orgin: start, destination: end })
+            },
+            submitPlace(){
+                this.$store.dispatch('getPlaces', {midway: this.midwayPoint, category: this.type})              
+                console.log(this.midwayPoint)
+                console.log(this.type)
             }
-            // bounds(){
-            //     var bound = new google.maps.LatLngBounds()
-            // }
-            // getPlace() {
-            //     geocoder.geocode({ 'placeId': place.place_id }, function (results, status) {
-            //         if (status !== 'OK') {
-            //             window.alert('Geocoder failed due to: ' + status);
-            //             return;
-            //         }
-            //         map.setZoom(11);
-            //         map.setCenter(results[0].geometry.location);
-            //         // Set the position of the marker using the place ID and location.
-            //         marker.setPlace({
-            //             placeId: place.place_id,
-            //             location: results[0].geometry.location
-            //         });
-            //         marker.setVisible(true);
-            //     })
-            // }
         },
         computed: {
-            originLatitude() {
-                return this.$store.state.origin.lat
+            origin(){
+                return this.$store.state.voyage.orgin
             },
-            originLongitude() {
-                return this.$store.state.origin.lng
-            },
-            destinationLatitude() {
-                return this.$store.state.destination.lat
-            },
-            destinationLongitude() {
-                return this.$store.state.destination.lng
+            destination(){
+                return this.$store.state.voyage.destination
             }
+            // originLatitude() {
+            //     return this.$store.state.origin.lat
+            // },
+            // originLongitude() {
+            //     return this.$store.state.origin.lng
+            // },
+            // destinationLatitude() {
+            //     return this.$store.state.destination.lat
+            // },
+            // destinationLongitude() {
+            //     return this.$store.state.destination.lng
+            // }
         }
     }
 </script>
 <style scoped>
     #map {
-        height: 600px;
-        width: 800px;
+        height: 50vh;
+        width: 100%;
     }
 </style>
