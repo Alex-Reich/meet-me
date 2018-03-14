@@ -9,6 +9,7 @@ require('./db/mlab-config');
 
 var authRoutes = require('./auth/routes');
 var contactRoutes = require('./routes/contacts')
+var googlePlacesRoutes = require('./routes/googlePlaces')
 
 var whitelist = ['http://localhost:8080'];
 var corsOptions = {
@@ -26,6 +27,7 @@ server.use(bp.urlencoded({ extended: true }));
 
 server.use(authRoutes.router);
 server.use(contactRoutes.router);
+server.use(googlePlacesRoutes.router)
 
 server.use('*', (error, req, res, next) => {
     res.status(400).send(error);

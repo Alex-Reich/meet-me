@@ -21,6 +21,17 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+                    <form v-on:change="submitPlace()">
+                        <select class="form-control form-control-sm" v-model="type">
+                            <option value="" disabled>Choose Category</option>
+                            <option value="cafe">Coffee Shops</option>
+                            <option value="restaurant">Restaurants</option>
+                            <option value="bar">Bars</option>
+                            <option value="bakery">Bakeries</option>
+                            <option value="park">Parks</option>
+                            <option value="bowling_alley">Bowling Alleys</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
@@ -36,6 +47,7 @@
                     destination: '',
                     travelMode: 'DRIVING'
                 },
+                type: '',
                 map: {},
                 markerCoordinats: [],
                 midwayPoint: {}
@@ -43,6 +55,11 @@
         },
         mounted() {
             this.initMap()
+        },
+        watch:{
+            results: function(value) {
+                this.resultMarker(value)
+            }
         },
         methods: {
             getTrip() {
@@ -100,23 +117,6 @@
                 this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type })
 
             },
-            getPlaces(midway) {
-                
-                // debugger
-                // map = new google.maps.Map(document.getElementById('map'), {
-                //     center: pyrmont,
-                //     zoom: 15
-                // });
-
-                var request = {
-                    location: pyrmont,
-                    radius: '500',
-                    type: 'restaurant'
-                };
-                service = new google.maps.places.PlacesService(map);
-                service.textSearch(request, callback);
-
-            },
             addMarker(location, map) { // CREATES MARKERS
                 var marker = new google.maps.Marker({
                     position: location,
@@ -133,6 +133,24 @@
             },
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
+            },
+            resultMarker(arr){
+                console.log('RESULTS ARRAY', arr)
+                var infoWindow = new google.maps.InfoWindow();
+
+                for (let i = 0; i < arr.length-10; i++) {
+                    const place = arr[i];
+                    
+                    var marker = new google.maps.Marker({
+                        position: place.geometry.location,
+                        map: this.map
+                    })
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infoWindow.setContent('<div><strong>' + place.name + '</strong></div><div><strong>'
+                            + place.vicinity + '</strong></div><div><strong>' + place.rating + '</strong></div>')
+                        infoWindow.open(this.map, this)
+                    })               
+                }
             }
             // bounds(){
             //     var bound = new google.maps.LatLngBounds()
@@ -155,8 +173,11 @@
             // }
         },
         computed: {
-            midway(){
+            midway() {
                 return this.$store.state.midway
+            },
+            results(){
+                return this.$store.state.results
             }
         }
     }

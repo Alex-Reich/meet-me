@@ -11,8 +11,9 @@ var geocode = axios.create({
 });
 
 var serverAPI = axios.create({
-    baseURL: "localhost:3000/api",
-    timeout: 3000
+    baseURL: "//localhost:3000/api/",
+    // timeout: 3000,
+    withCredentials: true
 })
 
 var placesAPI = axios.create({
@@ -49,7 +50,8 @@ export default new vuex.Store({
             }
         },
         midway: {},
-        options: []
+        options: [],
+        results: []
     },
     modules: {
         authStore
@@ -72,6 +74,9 @@ export default new vuex.Store({
         setMidway(state, payload){
             console.log('setMIDWAY,', payload)
             state.midway = payload
+        },
+        setResults(state, payload){
+            state.results = payload
         }
     },
     actions: {
@@ -113,9 +118,10 @@ export default new vuex.Store({
                 })
         },
         getPlaces({ commit, dispatch }, payload) {
-            serverAPI.get('google', payload)
+            serverAPI.post('google', payload)
                 .then(res => {
-                    console.log('GOOGLE PLACES RESULTS', res)
+                    console.log('GOOGLE PLACES RESULTS', res.data.results)
+                    commit('setResults', res.data.results)
                 })
                 .catch(err => {
                     console.log(err)
