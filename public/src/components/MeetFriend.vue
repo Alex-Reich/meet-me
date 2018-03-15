@@ -1,7 +1,5 @@
 <template>
     <div class="meet-friend">
-        <!-- <iframe width="600" height="450" frameborder="0" style="border:0" v-bind:src="mapSrc" allowfullscreen>
-        </iframe> -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-8">
@@ -24,12 +22,25 @@
                     <form v-on:change="submitPlace()">
                         <select class="form-control form-control-sm" v-model="type">
                             <option value="" disabled>Choose Category</option>
-                            <option value="cafe">Coffee Shops</option>
+                            <option value="coffee">Coffee Shops</option>
                             <option value="restaurant">Restaurants</option>
+                            <option value="pizza">Pizza</option>
+                            <option value="sandwich">Sandwich</option>
+                            <option value="mexican+food">Mexican Food</option>
+                            <option value="asian+food">Asian Food</option>
                             <option value="bar">Bars</option>
+                            <option value="ice+cream">Ice Cream</option>
                             <option value="bakery">Bakeries</option>
+                            <option value="hotel">Hotel</option>
                             <option value="park">Parks</option>
-                            <option value="bowling_alley">Bowling Alleys</option>
+                        </select>
+                    </form>
+                    <form v-on:change="submitPlace()">
+                        <select class="form-control form-control-sm" v-model="radius">
+                            <option value="1609">1 Mile</option>
+                            <option value="4828">3 Miles</option>
+                            <option value="8046">5 Miles</option>
+                            <option value="16093">10 Miles</option>
                         </select>
                     </form>
                 </div>
@@ -50,17 +61,20 @@
                 type: '',
                 map: {},
                 markerCoordinats: [],
-                midwayPoint: {}
+                midwayPoint: {},
+                radius: 4828,
+                markers: []
             }
         },
         mounted() {
             this.initMap()
         },
-        watch:{
+        watch: {
             // results: function(value) {
             //     this.resultMarker(value)
             // },
-            roadResults: function(value){
+            roadResults: function (value) {
+                console.log("VALUE", value)
                 this.resultMarker(value)
             }
         },
@@ -117,7 +131,7 @@
                 // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
                 // this.getDistance(start, end)
             },
-            findDrivingMidPoint(start, end){
+            findDrivingMidPoint(start, end) {
                 var scope = this
                 var directionsService = new google.maps.DirectionsService();
                 var request = {
@@ -125,18 +139,18 @@
                     destination: end,
                     travelMode: google.maps.TravelMode.DRIVING
                 }
-                directionsService.route(request, function(response, status){
+                directionsService.route(request, function (response, status) {
                     console.log("DIRECTIONS RESPONSE", response)
-                    if(status == google.maps.DirectionsStatus.OK){
+                    if (status == google.maps.DirectionsStatus.OK) {
                         var numberofWaypoints = response.routes[0].overview_path.length
-                        var midPoint = response.routes[0].overview_path[parseInt(numberofWaypoints/2)]
+                        var midPoint = response.routes[0].overview_path[parseInt(numberofWaypoints / 2)]
                         console.log("MIDPOINT", midPoint.lat(), midPoint.lng())
-                        scope.roadMidwayMarker({lat: midPoint.lat(),lng: midPoint.lng()}, scope.map)
+                        scope.roadMidwayMarker({ lat: midPoint.lat(), lng: midPoint.lng() }, scope.map)
                     }
                 })
             },
             submitPlace() {
-                this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type })
+                this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type, radius: this.radius })
 
             },
             addMarker(location, map) { // CREATES MARKERS
@@ -161,42 +175,50 @@
                     draggable: true
 
                 })
-                debugger
                 this.$store.commit('setRoadMidway', location)
             },
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
             },
-            resultMarker(arr){
-                console.log('RESULTS ARRAY', arr)
+            resultMarker(arr) {
+                var scope = this
                 var infoWindow = new google.maps.InfoWindow();
-
-                for (let i = 0; i < arr.length-10; i++) {
+                if (this.markers.length > 0) {
+                    var res = this.markers
+                    for (var j = 0; j < res.length; j++) {
+                        var marker = res[j]
+                        this.deleteMarkers(marker)
+                    }
+                }
+                for (let i = 0; i < arr.length - 10; i++) {
                     const place = arr[i];
-                    
                     var marker = new google.maps.Marker({
                         position: place.geometry.location,
                         map: this.map
                     })
-                    google.maps.event.addListener(marker, 'click', function() {
+                    this.markers.push(marker)
+                    google.maps.event.addListener(marker, 'click', function () {
                         infoWindow.setContent('<div><strong>' + place.name + '</strong></div><div><strong>'
                             + place.vicinity + '</strong></div><div><strong>' + place.rating + '</strong></div>')
                         infoWindow.open(this.map, this)
-                    })               
+                    })
                 }
+            },
+            deleteMarkers(marker){
+                marker.setMap(null)
             }
         },
         computed: {
             midway() {
                 return this.$store.state.midway
             },
-            roadMidway(){
+            roadMidway() {
                 return this.$store.state.roadMidway
             },
-            results(){
+            results() {
                 return this.$store.state.midWayResults
             },
-            roadResults(){
+            roadResults() {
                 return this.$store.state.roadResults
             }
         }
