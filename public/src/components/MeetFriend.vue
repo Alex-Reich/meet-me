@@ -150,7 +150,7 @@
                 })
             },
             submitPlace() {
-                this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type, radius: this.radius })
+                this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius })
 
             },
             addMarker(location, map) { // CREATES MARKERS
@@ -181,7 +181,8 @@
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
             },
             resultMarker(arr) {
-                var scope = this
+
+
                 var infoWindow = new google.maps.InfoWindow();
                 if (this.markers.length > 0) {
                     var res = this.markers
@@ -190,7 +191,7 @@
                         this.deleteMarkers(marker)
                     }
                 }
-                for (let i = 0; i < arr.length - 10; i++) {
+                for (let i = 0; i < arr.length; i++) {
                     const place = arr[i];
                     var marker = new google.maps.Marker({
                         position: place.geometry.location,
@@ -203,8 +204,40 @@
                         infoWindow.open(this.map, this)
                     })
                 }
+                this.resultBounds(this.markers)
             },
-            deleteMarkers(marker){
+            resultBounds(arr) {
+                console.log(arr)
+                
+                // arr[i].geometry.location.lat
+                // ne ++ ++
+                // sw -- --
+                // var latHolder = -90;
+                // var lngHolder = -180;
+                // // var swPoint = {};
+                // var nePoint = {};
+                // for (let i = 0; i < arr.length; i++) {
+                //     const place = arr[i].geometry.location; // place{lat:,lng:}
+                //     if (place.lat > latHolder) {
+                //         latHolder = place.lat
+
+                    // }
+                    // else if(place.lng > lngHolder){
+                    //     lngHolder = place.lng
+                    // }
+                // }
+                // var bounds = new google.maps.LatLngBounds()
+                // bounds.extend(start);
+                // bounds.extend(end)
+
+
+
+
+
+
+                // this.map.fitBounds(bounds)
+            },
+            deleteMarkers(marker) {
                 marker.setMap(null)
             }
         },
