@@ -50,8 +50,10 @@ export default new vuex.Store({
             }
         },
         midway: {},
+        roadMidway: {},
         options: [],
-        results: []
+        midWayResults: [],
+        roadResults: []
     },
     modules: {
         authStore
@@ -68,15 +70,20 @@ export default new vuex.Store({
             vue.set(state.voyage.destination, "lng", payload.lng)
         },
         updateUser(state, payload) {
-            debugger
             state.user = payload
         },
         setMidway(state, payload){
             console.log('setMIDWAY,', payload)
             state.midway = payload
         },
+        setRoadMidway(state, payload){
+            state.roadMidway = payload
+        },
         setResults(state, payload){
-            state.results = payload
+            state.midWayResults = payload
+        },
+        setRoadResults(state, payload){
+            state.roadResults = payload
         }
     },
     actions: {
@@ -122,6 +129,7 @@ export default new vuex.Store({
                 .then(res => {
                     console.log('GOOGLE PLACES RESULTS', res.data.results)
                     commit('setResults', res.data.results)
+                    commit('setRoadResults', res.data.results)
                 })
                 .catch(err => {
                     console.log(err)

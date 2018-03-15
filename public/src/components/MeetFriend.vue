@@ -57,7 +57,10 @@
             this.initMap()
         },
         watch:{
-            results: function(value) {
+            // results: function(value) {
+            //     this.resultMarker(value)
+            // },
+            roadResults: function(value){
                 this.resultMarker(value)
             }
         },
@@ -108,10 +111,29 @@
                 var center = this.map.getCenter()
                 this.map.setCenter({ lat: center.lat(), lng: center.lng() })
                 this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
+                this.findDrivingMidPoint(start, end)
 
-                this.$store.commit('setMidway', { lat: center.lat(), lng: center.lng() })
+                // this.$store.commit('setMidway', { lat: center.lat(), lng: center.lng() })
                 // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
                 // this.getDistance(start, end)
+            },
+            findDrivingMidPoint(start, end){
+                var scope = this
+                var directionsService = new google.maps.DirectionsService();
+                var request = {
+                    origin: start,
+                    destination: end,
+                    travelMode: google.maps.TravelMode.DRIVING
+                }
+                directionsService.route(request, function(response, status){
+                    console.log("DIRECTIONS RESPONSE", response)
+                    if(status == google.maps.DirectionsStatus.OK){
+                        var numberofWaypoints = response.routes[0].overview_path.length
+                        var midPoint = response.routes[0].overview_path[parseInt(numberofWaypoints/2)]
+                        console.log("MIDPOINT", midPoint.lat(), midPoint.lng())
+                        scope.roadMidwayMarker({lat: midPoint.lat(),lng: midPoint.lng()}, scope.map)
+                    }
+                })
             },
             submitPlace() {
                 this.$store.dispatch('getPlaces', { midway: this.midway, category: this.type })
@@ -130,6 +152,17 @@
                     draggable: true
 
                 })
+                this.$store.commit('setMidway', location)
+            },
+            roadMidwayMarker(location, map) {
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                    draggable: true
+
+                })
+                debugger
+                this.$store.commit('setRoadMidway', location)
             },
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
@@ -152,32 +185,19 @@
                     })               
                 }
             }
-            // bounds(){
-            //     var bound = new google.maps.LatLngBounds()
-            // }
-            // getPlace() {
-            //     geocoder.geocode({ 'placeId': place.place_id }, function (results, status) {
-            //         if (status !== 'OK') {
-            //             window.alert('Geocoder failed due to: ' + status);
-            //             return;
-            //         }
-            //         map.setZoom(11);
-            //         map.setCenter(results[0].geometry.location);
-            //         // Set the position of the marker using the place ID and location.
-            //         marker.setPlace({
-            //             placeId: place.place_id,
-            //             location: results[0].geometry.location
-            //         });
-            //         marker.setVisible(true);
-            //     })
-            // }
         },
         computed: {
             midway() {
                 return this.$store.state.midway
             },
+            roadMidway(){
+                return this.$store.state.roadMidway
+            },
             results(){
-                return this.$store.state.results
+                return this.$store.state.midWayResults
+            },
+            roadResults(){
+                return this.$store.state.roadResults
             }
         }
     }
