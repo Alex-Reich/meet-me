@@ -43,12 +43,16 @@
                             <option value="16093">10 Miles</option>
                         </select>
                     </form>
+                    <div v-for="result in roadResults">
+                        <results :result="result"></results>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+    import Results from './Results.vue'
     export default {
         name: 'MeetFriend',
         data() {
@@ -70,9 +74,6 @@
             this.initMap()
         },
         watch: {
-            // results: function(value) {
-            //     this.resultMarker(value)
-            // },
             roadResults: function (value) {
                 console.log("VALUE", value)
                 this.resultMarker(value)
@@ -176,13 +177,21 @@
 
                 })
                 this.$store.commit('setRoadMidway', location)
+                marker.addListener('dragend', this.updateLatLng)
+            },
+            updateLatLng(marker) {
+                debugger
+                console.log('NEW POSITION:', {lat: marker.latLng.lat(), lng: marker.latLng.lng()})
+                var newPosition = {lat: marker.latLng.lat(), lng: marker.latLng.lng()}
+                console.log('NEW POSITION2:', newPosition)
+                this.$store.commit('setRoadMidway', newPosition)
+                this.submitPlace()
             },
             getDistance(start, end) {
                 this.$store.dispatch('getDistance', { orgin: start, destination: end })
             },
             resultMarker(arr) {
-
-
+                this.resultBounds(arr)
                 var infoWindow = new google.maps.InfoWindow();
                 if (this.markers.length > 0) {
                     var res = this.markers
@@ -195,7 +204,8 @@
                     const place = arr[i];
                     var marker = new google.maps.Marker({
                         position: place.geometry.location,
-                        map: this.map
+                        map: this.map,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                     })
                     this.markers.push(marker)
                     google.maps.event.addListener(marker, 'click', function () {
@@ -204,38 +214,63 @@
                         infoWindow.open(this.map, this)
                     })
                 }
-                this.resultBounds(this.markers)
+                // this.resultBounds(this.markers)
             },
             resultBounds(arr) {
                 console.log(arr)
-                
+
                 // arr[i].geometry.location.lat
                 // ne ++ ++
                 // sw -- --
-                // var latHolder = -90;
-                // var lngHolder = -180;
-                // // var swPoint = {};
-                // var nePoint = {};
-                // for (let i = 0; i < arr.length; i++) {
-                //     const place = arr[i].geometry.location; // place{lat:,lng:}
-                //     if (place.lat > latHolder) {
-                //         latHolder = place.lat
+                var neLatHolder = -90;
+                var neLngHolder = -180;
+                var swLatHolder = 90;
+                var swLngHolder = 180;
 
+                var swPoint = {
+                    lat: 90,
+                    lng: 180
+                };
+                var nePoint = {
+                    lat: -90,
+                    lng: -180
+                };
+
+                for (let i = 0; i < arr.length; i++) {
+                    const place = arr[i].geometry.location; // place{lat:,lng:}
+                    // debugger
+                    if (place.lat > nePoint.lat && place.lng > nePoint.lng) {
+                        nePoint = { lat: place.lat, lng: place.lng }
+                    }
+                    else {
+                        if (place.lng < swPoint.lng && place.lat < swPoint.lat) {
+                            swPoint = { lat: place.lat, lng: place.lng }
+                        }
+                    }
+                    // if (place.lat > neLatHolder) {
+                    //     neLatHolder = place.lat
+                    //     if(place.lng > neLngHolder){
+                    //         neLngHolder = place.lng
+                    //         nePoint = place
+                    //     } else { continue }
+                    // } 
+                    // else {
+                    //     // debugger
+                    //     swLatHolder = place.lat
+                    //     if(place.lng < swLngHolder){
+                    //         swLngHolder = place.lng
+                    //         swPoint = place
+                    //     } else {continue}
                     // }
-                    // else if(place.lng > lngHolder){
-                    //     lngHolder = place.lng
-                    // }
-                // }
-                // var bounds = new google.maps.LatLngBounds()
-                // bounds.extend(start);
-                // bounds.extend(end)
+                }
+                console.log('NE POINT', nePoint)
+                console.log('SW POINT', swPoint)
 
+                var bounds = new google.maps.LatLngBounds()
+                bounds.extend(swPoint);
+                bounds.extend(nePoint)
 
-
-
-
-
-                // this.map.fitBounds(bounds)
+                this.map.fitBounds(bounds)
             },
             deleteMarkers(marker) {
                 marker.setMap(null)
@@ -248,18 +283,18 @@
             roadMidway() {
                 return this.$store.state.roadMidway
             },
-            results() {
-                return this.$store.state.midWayResults
-            },
             roadResults() {
                 return this.$store.state.roadResults
             }
+        },
+        components: {
+            Results
         }
     }
 </script>
 <style scoped>
     #map {
-        height: 600px;
-        width: 800px;
+        height: 100vh;
+        width: 100%;
     }
 </style>

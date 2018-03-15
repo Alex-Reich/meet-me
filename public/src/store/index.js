@@ -128,7 +128,6 @@ export default new vuex.Store({
             serverAPI.post('google', payload)
                 .then(res => {
                     console.log('GOOGLE PLACES RESULTS', res.data.results)
-                    commit('setResults', res.data.results)
                     commit('setRoadResults', res.data.results)
                 })
                 .catch(err => {
