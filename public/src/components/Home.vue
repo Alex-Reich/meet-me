@@ -5,9 +5,11 @@
     <div class="container-fluid">
       <div>
         <div class="row d-flex justify-content-end">
-                <button type="button" class="btn mgContactBtn m-2" data-toggle="modal" data-target="#contacts">
-                        <b>Manage Contacts</b>
-                    </button>            
+            <router-link to="/Contacts">
+                <button type="button" class="btn mgContactBtn m-2" >
+                    <b>Manage Contacts</b>
+                </button>
+            </router-link>            
             <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
                 <b>Sign Up</b>
             </button>
@@ -22,21 +24,27 @@
 
       </div>
       <div class="row spacer"></div>
+     
       <div class="row d-flex justify-content-center ">
-        <div class="colfmt d-flex align-items-center justify-content-center col-lg-4 m-4">
+        <router-link to="/meet-friend"  class="colfmt d-flex align-items-center justify-content-center col-lg-4 m-4">
+        <div>
           <h2>Meet a Friend</h2>
         </div>
+    </router-link>
         <div class="colfmt d-flex align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
       </div>
+   
   </div>
   <login></login>
   <contacts></contacts>
+  
   </div>
 </template>
 
 <script>
     import Login from './Login'
     import Contacts from './Contacts'
+
     export default {
         name: 'Home',
         data() {
@@ -59,10 +67,13 @@
                 this.$store.dispatch('createUser', this.createdUser)
                 $('#signup').modal('hide')
             },
+            meetFriend() {
+                this.$store.dispatch('meetFriend', this.user)
+                $('#meetFriend').modal('hide')
+            },
             manageContacts() {
                 $('#contacts').modal('hide')
             }
-
         }
 
     }
@@ -84,14 +95,22 @@
     .colfmt {
         border: 2px solid white;
         min-height: 20vh;
-        background-color: steelblue;
+        background-color: #4682b4;
     }
     
     h1 {
-        font-size: 48pt;
+        font-size: 36pt;
+    }
+    
+    h2 {
+        color: white;
     }
     
     .spacer {
         min-height: 75px;
+    }
+    
+    router-link {
+        color: white;
     }
 </style>

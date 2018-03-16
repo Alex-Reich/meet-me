@@ -43,6 +43,7 @@ router.post('/auth/login', (req, res) => {
 })
 
 router.get('/auth/authenticate', (req, res) => {
+    console.log(req.session.uid)
     Users.findById(req.session.uid)
         .then(user => {
             if (!user) {

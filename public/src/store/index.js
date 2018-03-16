@@ -72,29 +72,29 @@ export default new vuex.Store({
         updateUser(state, payload) {
             state.user = payload
         },
-        setMidway(state, payload){
+        setMidway(state, payload) {
             console.log('setMIDWAY,', payload)
             state.midway = payload
         },
-        setRoadMidway(state, payload){
+        setRoadMidway(state, payload) {
             state.roadMidway = payload
         },
-        setResults(state, payload){
+        setResults(state, payload) {
             state.midWayResults = payload
         },
-        setRoadResults(state, payload){
+        setRoadResults(state, payload) {
             state.roadResults = payload
         }
     },
     actions: {
         //direction actions
         getTripOrigin({ commit, dispatch }, payload) {
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
                 geocode.get(payload.origin + apiKey).then(res => {
-                    var data = res.data.results[0].geometry.location
-                    commit('setMapOrigin', { lat: data.lat, lng: data.lng })
-                    resolve({ lat: data.lat, lng: data.lng })
-                })
+                        var data = res.data.results[0].geometry.location
+                        commit('setMapOrigin', { lat: data.lat, lng: data.lng })
+                        resolve({ lat: data.lat, lng: data.lng })
+                    })
                     .catch(error => {
                         console.log(error)
                         reject()
@@ -102,17 +102,17 @@ export default new vuex.Store({
             })
         },
         getTripDestination({ commit, dispatch }, payload) {
-            return new Promise((resolve, reject)=>{
+            return new Promise((resolve, reject) => {
                 geocode.get(payload.destination + apiKey).then(res => {
-                    var data = res.data.results[0].geometry.location
-                    commit('setMapDestination', { lat: data.lat, lng: data.lng })
-                    resolve({ lat: data.lat, lng: data.lng })
-                })
+                        var data = res.data.results[0].geometry.location
+                        commit('setMapDestination', { lat: data.lat, lng: data.lng })
+                        resolve({ lat: data.lat, lng: data.lng })
+                    })
                     .catch(error => {
                         console.log(error)
                         reject()
                     })
-                // commit('setMap', geocode + payload.origin + apiKey)
+                    // commit('setMap', geocode + payload.origin + apiKey)
 
             })
         },
@@ -133,13 +133,16 @@ export default new vuex.Store({
                 .catch(err => {
                     console.log(err)
                 })
-            // placesAPI.get('json?location='+payload.midway.lat + ',' + payload.midway.lng + '&rankby=distance&types=' + payload.category + apiKey)
-            //     .then(res => {
-            //         console.log('GOOGLE PLACES RESULTS', res)
-            //     })
-            //     .catch(err => {
-            //         console.log(err)
-            //     })
+                // placesAPI.get('json?location='+payload.midway.lat + ',' + payload.midway.lng + '&rankby=distance&types=' + payload.category + apiKey)
+                //     .then(res => {
+                //         console.log('GOOGLE PLACES RESULTS', res)
+                //     })
+                //     .catch(err => {
+                //         console.log(err)
+                //     })
         }
+        // meetFriend({commit, dispatch }, payload){
+
+        // }
     }
 });

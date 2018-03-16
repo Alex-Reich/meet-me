@@ -39,7 +39,6 @@ router.delete("/api/contacts/:contactId", (req, res, next) => {
         .catch(next)
 })
 
-
 // Update a contact by ID
 router.put("/api/lists/:contactId", (req, res, next) => {
     Contacts.findByIdAndUpdate(req.params.contactId, req.body, { new: true })
@@ -50,8 +49,18 @@ router.put("/api/lists/:contactId", (req, res, next) => {
 })
 
 // Get contacts by userId
-router.get("/api/users/:userId/contacts/:contactId", (req, res, next) => {
+router.get("/api/users/:userId/contacts", (req, res, next) => {
     Contacts.find({ userId: req.params.userId })
+        .then(contacts => {
+            return res.send(contacts)
+        })
+        .catch(next)
+})
+
+
+// Test Only:  get all contacts
+router.get("/api/contacts", (req, res, next) => {
+    Contacts.find()
         .then(contacts => {
             return res.send(contacts)
         })
