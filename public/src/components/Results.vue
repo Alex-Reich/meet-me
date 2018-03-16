@@ -2,6 +2,7 @@
     <div class="results">
         <h5 class="">{{result.name}}</h5>
         <h6 class="mb-2 text-muted">{{result.vicinity}}</h6>
+        <h6 class="mb-2 text-muted">Phone Number: {{result.formatted_phone_number}}</h6>
         <div>
             <p>{{result.rating}}
                 <span class="stars" :id="result.id"></span>

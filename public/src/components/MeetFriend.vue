@@ -6,46 +6,62 @@
                     <div class="map-friend" id="map"></div>
                 </div>
                 <div class="col-4">
-                    <div class="form">
-                        <form @submit.prevent="getTrip(trip)">
-                            <div class="form-group">
-                                <label for="your-location">Your Location</label>
-                                <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="contacts-location">Your Contacts Location</label>
-                                <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
+                    <div v-if="show == false">
+                        <div class="form">
+                            <form @submit.prevent="getTrip(trip)">
+                                <div class="form-group">
+                                    <label for="your-location">Your Location</label>
+                                    <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contacts-location">Your Contacts Location</label>
+                                    <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
                     </div>
-                    <form v-on:change="submitPlace()">
-                        <select class="form-control form-control-sm" v-model="type">
-                            <option value="" disabled>Choose Category</option>
-                            <option value="coffee">Coffee Shops</option>
-                            <option value="restaurant">Restaurants</option>
-                            <option value="pizza">Pizza</option>
-                            <option value="sandwich">Sandwich</option>
-                            <option value="mexican+food">Mexican Food</option>
-                            <option value="asian+food">Asian Food</option>
-                            <option value="bar">Bars</option>
-                            <option value="ice+cream">Ice Cream</option>
-                            <option value="bakery">Bakeries</option>
-                            <option value="hotel">Hotel</option>
-                            <option value="park">Parks</option>
-                        </select>
-                    </form>
-                    <form v-on:change="submitPlace()">
-                        <select class="form-control form-control-sm" v-model="radius">
-                            <option value="1609">1 Mile</option>
-                            <option value="4828">3 Miles</option>
-                            <option value="8046">5 Miles</option>
-                            <option value="16093">10 Miles</option>
-                        </select>
-                    </form>
-                    <div class="list-group marg-top">
-                        <div class="list-group-item" v-for="result in roadResults">
-                            <results :result="result"></results>
+                    <div v-else>
+                        <button class="btn btn-primary" @click="show = false, trip = {}, initMap()">New Search</button>
+                        <h4>Your Location: </h4>
+                        <h6>{{this.originAddress}}</h6>
+                        <h4>Your Contacts Location: </h4>
+                        <h6>{{this.destinationAddress}}</h6>
+                        <form v-on:change="submitPlace()">
+                            <select class="form-control form-control-sm" v-model="type">
+                                <option value="" disabled>Choose Category</option>
+                                <option value="coffee">Coffee Shops</option>
+                                <option value="restaurant">Restaurants</option>
+                                <option value="pizza">Pizza</option>
+                                <option value="sandwich">Sandwich</option>
+                                <option value="mexican+food">Mexican Food</option>
+                                <option value="asian+food">Asian Food</option>
+                                <option value="bar">Bars</option>
+                                <option value="ice+cream">Ice Cream</option>
+                                <option value="bakery">Bakeries</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="park">Parks</option>
+                            </select>
+                        </form>
+                        <form v-on:change="submitPlace()">
+                            <select class="form-control form-control-sm" v-model="radius">
+                                <option value="1609">1 Mile</option>
+                                <option value="4828">3 Miles</option>
+                                <option value="8046">5 Miles</option>
+                                <option value="16093">10 Miles</option>
+                            </select>
+                        </form>
+                        <form v-on:change="submitPlace()">
+                            <select class="form-control form-control-sm" v-model="totalResults">
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </form>
+                        <div class="list-group marg-top">
+                            <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
+                                <results :result="result"></results>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,7 +85,9 @@
                 markerCoordinats: [],
                 midwayPoint: {},
                 radius: 4828,
-                markers: []
+                markers: [],
+                show: false,
+                totalResults: 10
             }
         },
         mounted() {
@@ -83,6 +101,7 @@
         },
         methods: {
             getTrip() {
+                this.show = true
                 this.trip.origin = this.trip.origin.split(' ').join('+')
                 this.trip.destination = this.trip.destination.split(' ').join('+')
                 Promise.all([
@@ -154,7 +173,7 @@
             },
             submitPlace() {
                 this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius })
-                this.addCircle({location: this.roadMidway, radius: this.radius})
+                this.addCircle({ location: this.roadMidway, radius: this.radius })
 
             },
             addMarker(location, map) { // CREATES MARKERS
@@ -167,8 +186,9 @@
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    label: '@'
-
+                    icon: {
+                        url: '../assets/results-arrow.png'
+                    }
                 })
                 this.$store.commit('setMidway', location)
             },
@@ -184,14 +204,14 @@
             },
             addCircle(location) {
                 console.log('LOCATION', location)
-                if(cityCircle){
-                    
+                if (cityCircle) {
+
                 }
                 var cityCircle = new google.maps.Circle({
-                    strokeColor: '#df9948',
+                    strokeColor: '#797979',
                     strokeOpacity: 0.5,
                     strokeWeight: 2,
-                    fillColor: '#df9948',
+                    fillColor: '#797979',
                     fillOpacity: 0.35,
                     center: location.location,
                     map: this.map,
@@ -219,7 +239,7 @@
                         this.deleteMarkers(marker)
                     }
                 }
-                for (let i = 0; i < arr.length; i++) {
+                for (let i = 0; i < this.totalResults; i++) {
                     const place = arr[i];
                     var marker = new google.maps.Marker({
                         position: place.geometry.location,
@@ -257,6 +277,12 @@
             },
             roadResults() {
                 return this.$store.state.roadResults
+            },
+            originAddress() {
+                return this.$store.state.originAddress
+            },
+            destinationAddress() {
+                return this.$store.state.destinationAddress
             }
         },
         components: {
