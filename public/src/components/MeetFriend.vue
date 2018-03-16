@@ -43,8 +43,10 @@
                             <option value="16093">10 Miles</option>
                         </select>
                     </form>
-                    <div v-for="result in roadResults">
-                        <results :result="result"></results>
+                    <div class="list-group marg-top">
+                        <div class="list-group-item" v-for="result in roadResults">
+                            <results :result="result"></results>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -301,5 +303,8 @@
     #map {
         height: 100vh;
         width: 100%;
+    }
+    .marg-top{
+        margin-top: 1.5rem;
     }
 </style>
