@@ -154,6 +154,7 @@
             },
             submitPlace() {
                 this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius })
+                this.addCircle({location: this.roadMidway, radius: this.radius})
 
             },
             addMarker(location, map) { // CREATES MARKERS
@@ -166,7 +167,7 @@
                 var marker = new google.maps.Marker({
                     position: location,
                     map: map,
-                    draggable: true
+                    label: '@'
 
                 })
                 this.$store.commit('setMidway', location)
@@ -180,6 +181,22 @@
                 })
                 this.$store.commit('setRoadMidway', location)
                 marker.addListener('dragend', this.updateLatLng)
+            },
+            addCircle(location) {
+                console.log('LOCATION', location)
+                if(cityCircle){
+                    
+                }
+                var cityCircle = new google.maps.Circle({
+                    strokeColor: '#df9948',
+                    strokeOpacity: 0.5,
+                    strokeWeight: 2,
+                    fillColor: '#df9948',
+                    fillOpacity: 0.35,
+                    center: location.location,
+                    map: this.map,
+                    radius: parseInt(location.radius)
+                });
             },
             updateLatLng(marker) {
                 debugger
@@ -252,7 +269,8 @@
         height: 100vh;
         width: 100%;
     }
-    .marg-top{
+
+    .marg-top {
         margin-top: 1.5rem;
     }
 </style>
