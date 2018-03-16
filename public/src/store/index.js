@@ -55,7 +55,8 @@ export default new vuex.Store({
         midWayResults: [],
         roadResults: [],
         originAddress: '',
-        destinationAddress: ''
+        destinationAddress: '',
+        contacts: {}
     },
     modules: {
         authStore
@@ -92,6 +93,9 @@ export default new vuex.Store({
         },
         setDestinationAddress(state, payload) {
             state.destinationAddress = payload
+        },
+        setContacts(state, payload) {
+            state.contacts = payload
         }
     },
     actions: {
@@ -143,9 +147,17 @@ export default new vuex.Store({
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        getContacts({ commit, dispatch }, payload) {
+            serverAPI
+                .get('users/${userId}/contacts')
+                .then(res => {
+                    var contacts = res.data
+                    commit('setContacts', contacts)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
-        // meetFriend({commit, dispatch }, payload){
-
-        // }
     }
 });
