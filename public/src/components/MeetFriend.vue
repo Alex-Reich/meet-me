@@ -218,64 +218,12 @@
             },
             resultBounds(arr) {
                 console.log(arr)
-
-                // arr[i].geometry.location.lat
-                // ne ++ ++
-                // sw -- --
-                // var neLatHolder = -90;
-                // var neLngHolder = -180;
-                // var swLatHolder = 90;
-                // var swLngHolder = 180;
-
-                // var swPoint = {
-                //     lat: 90,
-                //     lng: 180
-                // };
-                // var nePoint = {
-                //     lat: -90,
-                //     lng: -180
-                // };
                 var bounds = new google.maps.LatLngBounds()
                 for (var i = 0; i < arr.length; i++) {
                     var place = arr[i].geometry.location
                     bounds.extend({ lat: place.lat, lng: place.lng })
                 }
                 this.map.fitBounds(bounds)
-                // for (let i = 0; i < arr.length; i++) {
-                //     const place = arr[i].geometry.location; // place{lat:,lng:}
-                //     // debugger
-                //     if (place.lat > nePoint.lat && place.lng > nePoint.lng) {
-                //         nePoint = { lat: place.lat, lng: place.lng }
-                //     }
-                //     else {
-                //         if (place.lng < swPoint.lng && place.lat < swPoint.lat) {
-                //             swPoint = { lat: place.lat, lng: place.lng }
-                //         }
-                //     }
-                // if (place.lat > neLatHolder) {
-                //     neLatHolder = place.lat
-                //     if(place.lng > neLngHolder){
-                //         neLngHolder = place.lng
-                //         nePoint = place
-                //     } else { continue }
-                // } 
-                // else {
-                //     // debugger
-                //     swLatHolder = place.lat
-                //     if(place.lng < swLngHolder){
-                //         swLngHolder = place.lng
-                //         swPoint = place
-                //     } else {continue}
-                // }
-                // }
-                // console.log('NE POINT', nePoint)
-                // console.log('SW POINT', swPoint)
-
-                // var bounds = new google.maps.LatLngBounds()
-                // bounds.extend(swPoint);
-                // bounds.extend(nePoint)
-
-                // this.map.fitBounds(bounds)
             },
             deleteMarkers(marker) {
                 marker.setMap(null)
