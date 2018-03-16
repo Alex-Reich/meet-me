@@ -43,10 +43,10 @@
                 for (let i = 1; i <= result.rating; i++) {
                     template += `<i class="fas fa-star"></i>`
                 }
-                if (result.rating % 1 > .3 && result.rating % 1 < .7) {
+                if (result.rating % 1 > .3 && result.rating % 1 <= .8) {
                     template += `<i class="fas fa-star-half"></i>`
                 }
-                if (result.rating > 4.8 && result.rating < 5) {
+                if (result.rating == 4.9) {
                     template += `<i class="fas fa-star"></i>`
                 }
                 starElem.innerHTML = template
