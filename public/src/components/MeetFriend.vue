@@ -1,5 +1,6 @@
 <template>
     <div class="meet-friend">
+        <navbar class="marg-bot"></navbar>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-8">
@@ -81,6 +82,7 @@
 </template>
 <script>
     import Results from './Results.vue'
+    import Navbar from './Navbar.vue'
     export default {
         name: 'MeetFriend',
         data() {
@@ -301,20 +303,26 @@
             }
         },
         components: {
-            Results
+            Results,
+            Navbar
         }
     }
 </script>
 <style scoped>
     #map {
-        height: 100vh;
+        height: 87vh;
         width: 100%;
+        border-radius: 10px;
+        border: .1rem solid #dddddd;
     }
     .hovered{
         background-color: rgb(100, 156, 100)
     }
     .marg-top {
         margin-top: 1.5rem;
+    }
+    .marg-bot{
+        margin-bottom: 1rem
     }
     .flexor{
         display: flex;
