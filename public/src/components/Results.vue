@@ -1,6 +1,6 @@
 <template>
     <div class="results">
-        <h5 class="">{{result.name}}</h5>
+        <h5>{{result.name}}</h5>
         <div class="flexor">
             <div class="details">
                 <p class="smaller"><span class="stars">{{result.rating}}</span> <span class="stars" :id="result.id"></span> | <span :id="result.place_id"></span></p>
@@ -28,7 +28,7 @@
 
     export default {
         name: 'Results',
-        props: ['result'],
+        props: ['result', 'hovered'],
         data() {
             return {
                 photoImage: ''
@@ -37,7 +37,10 @@
         mounted() {
             this.getStar(this.result)
             this.getPrice(this.result)
-            this.getImage(this.result)
+            this.getImage(this.result) 
+        },
+        watch: {
+            
         },
         methods: {
             getImage(result){
@@ -69,7 +72,6 @@
                 priceElem.innerHTML = template
             },
             getStar(result) {
-                console.log('RESULT', result)
                 var starElem = document.getElementById(result.id)
                 var template = ''
                 if (!result.rating) {
@@ -86,12 +88,18 @@
                 }
                 starElem.innerHTML = template
             }
+        },
+        computed: {
+            roadResults() {
+                return this.$store.state.roadResults
+            }
         }
     }
 
 </script>
 
 <style scoped>
+    
     .smaller {
         font-size: .85rem
     }

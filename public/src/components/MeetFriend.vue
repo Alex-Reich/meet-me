@@ -65,10 +65,12 @@
                             </form>
                         </div>
                     </div>
+                        <div v-bind:class="{hovered: isHovered}">Cheese Test</div>
                         <button class="btn marg-top btn-primary btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
                         <div class="list-group marg-top">
                             <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
-                                <results :result="result"></results>
+                                <results  :result="result"></results>
+                                <!-- :hovered="hovered" -->
                             </div>
                         </div>
                     </div>
@@ -95,7 +97,8 @@
                 radius: 4828,
                 markers: [],
                 show: false,
-                totalResults: 10
+                totalResults: 10,
+                isHovered: false
             }
         },
         mounted() {
@@ -260,6 +263,10 @@
                             + place.vicinity + '</strong></div><div><strong>' + place.rating + '</strong></div>')
                         infoWindow.open(this.map, this)
                     })
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        this.isHovered = true
+                        console.log('I was Hovered on', this.isHovered)
+                    })
                 }
                 // this.resultBounds(this.markers)
             },
@@ -302,6 +309,9 @@
     #map {
         height: 100vh;
         width: 100%;
+    }
+    .hovered{
+        background-color: rgb(100, 156, 100)
     }
     .marg-top {
         margin-top: 1.5rem;
