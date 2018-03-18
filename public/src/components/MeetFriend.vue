@@ -22,11 +22,12 @@
                         </div>
                     </div>
                     <div v-else>
-                        <button class="btn btn-primary" @click="show = false, trip = {}, initMap()">New Search</button>
                         <h4>Your Location: </h4>
                         <h6>{{this.originAddress}}</h6>
                         <h4>Your Contacts Location: </h4>
                         <h6>{{this.destinationAddress}}</h6>
+                        <div class="flexor marg-top">
+                            <div>
                         <form v-on:change="submitPlace()">
                             <select class="form-control form-control-sm" v-model="type">
                                 <option value="" disabled>Choose Category</option>
@@ -43,21 +44,28 @@
                                 <option value="park">Parks</option>
                             </select>
                         </form>
-                        <form v-on:change="submitPlace()">
-                            <select class="form-control form-control-sm" v-model="radius">
-                                <option value="1609">1 Mile</option>
-                                <option value="4828">3 Miles</option>
-                                <option value="8046">5 Miles</option>
-                                <option value="16093">10 Miles</option>
-                            </select>
-                        </form>
-                        <form v-on:change="submitPlace()">
-                            <select class="form-control form-control-sm" v-model="totalResults">
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="20">20</option>
-                            </select>
-                        </form>
+                    </div>
+                        <div>
+                            <form v-on:change="submitPlace()">
+                                <select class="form-control form-control-sm" v-model="radius">
+                                    <option value="1609">1 Mile</option>
+                                    <option value="4828">3 Miles</option>
+                                    <option value="8046">5 Miles</option>
+                                    <option value="16093">10 Miles</option>
+                                </select>
+                            </form>
+                        </div>
+                        <div>
+                            <form v-on:change="submitPlace()">
+                                <select class="form-control form-control-sm" v-model="totalResults">
+                                    <option value="10">10 Results</option>
+                                    <option value="15">15 Results</option>
+                                    <option value="20">20 Results</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                        <button class="btn marg-top btn-primary btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
                         <div class="list-group marg-top">
                             <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
                                 <results :result="result"></results>
@@ -295,8 +303,11 @@
         height: 100vh;
         width: 100%;
     }
-
     .marg-top {
         margin-top: 1.5rem;
+    }
+    .flexor{
+        display: flex;
+        justify-content: space-between;
     }
 </style>
