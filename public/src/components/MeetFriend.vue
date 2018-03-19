@@ -18,7 +18,7 @@
                                     <label for="contacts-location">Your Contacts Location</label>
                                     <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn teal btn-block">Submit</button>
                             </form>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                         <div v-bind:class="{hovered: isHovered}">Cheese Test</div>
-                        <button class="btn marg-top btn-primary btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
+                        <button class="btn marg-top teal btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
                         <div class="list-group marg-top">
                             <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
                                 <results  :result="result"></results>
@@ -327,5 +327,14 @@
     .flexor{
         display: flex;
         justify-content: space-between;
+    }
+    .teal {
+        background-color: #94bac4;
+        color: white;
+        font-size: 1.1rem;
+        transition: all .3s linear;
+    }
+    .teal:hover {
+        background-color: #96cad8;
     }
 </style>
