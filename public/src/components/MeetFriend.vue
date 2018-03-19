@@ -66,12 +66,10 @@
                             </form>
                         </div>
                     </div>
-                        <div v-bind:class="{hovered: isHovered}">Cheese Test</div>
                         <button class="btn marg-top teal btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
                         <div class="list-group marg-top">
                             <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
-                                <results  :result="result"></results>
-                                <!-- :hovered="hovered" -->
+                                <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
                             </div>
                         </div>
                     </div>
@@ -100,7 +98,7 @@
                 markers: [],
                 show: false,
                 totalResults: 10,
-                isHovered: false
+                isHovered: ''
             }
         },
         mounted() {
@@ -159,7 +157,7 @@
                 this.map.fitBounds(bounds)
                 var center = this.map.getCenter()
                 this.map.setCenter({ lat: center.lat(), lng: center.lng() })
-                this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
+                // this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
                 this.findDrivingMidPoint(start, end)
 
                 // this.$store.commit('setMidway', { lat: center.lat(), lng: center.lng() })
@@ -195,16 +193,16 @@
                     map: map
                 })
             },
-            midwayMarker(location, map) {
-                var marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    icon: {
-                        url: '../assets/results-arrow.png'
-                    }
-                })
-                this.$store.commit('setMidway', location)
-            },
+            // midwayMarker(location, map) {
+            //     var marker = new google.maps.Marker({
+            //         position: location,
+            //         map: map,
+            //         icon: {
+            //             url: '../assets/results-arrow.png'
+            //         }
+            //     })
+            //     this.$store.commit('setMidway', location)
+            // },
             roadMidwayMarker(location, map) {
                 var marker = new google.maps.Marker({
                     position: location,
@@ -240,9 +238,10 @@
                 this.submitPlace()
             },
             getDistance(start, end) {
-                this.$store.dispatch('getDistance', { orgin: start, destination: end })
+                this.$store.dispatch('getDistance', { origin: start, destination: end })
             },
             resultMarker(arr) {
+                var scope = this
                 this.resultBounds(arr)
                 var infoWindow = new google.maps.InfoWindow();
                 if (this.markers.length > 0) {
@@ -266,12 +265,17 @@
                         infoWindow.open(this.map, this)
                     })
                     google.maps.event.addListener(marker, 'mouseover', function () {
-                        this.isHovered = true
+                        scope.isHovered = place.place_id
+                        // this.isHoveredOn = place.place_id
+                        // scope.highlight(place.place_id)
                         console.log('I was Hovered on', this.isHovered)
                     })
                 }
                 // this.resultBounds(this.markers)
             },
+            // highlight(place_id){
+            //     document.getElementById(place_id).classList.add('hovered')
+            // },
             resultBounds(arr) {
                 console.log(arr)
                 var bounds = new google.maps.LatLngBounds()
@@ -300,7 +304,8 @@
             },
             destinationAddress() {
                 return this.$store.state.destinationAddress
-            }
+            },
+            
         },
         components: {
             Results,
@@ -315,8 +320,8 @@
         border-radius: 10px;
         border: .1rem solid #dddddd;
     }
-    .hovered{
-        background-color: rgb(100, 156, 100)
+    .list-group-item{
+        padding: 0
     }
     .marg-top {
         margin-top: 1.5rem;

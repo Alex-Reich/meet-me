@@ -1,17 +1,25 @@
 <template>
-    <div class="results">
+    <div class="results" :class="isHoveredOn">
         <h5>{{result.name}}</h5>
         <div class="flexor">
             <div class="details">
                 <p class="smaller"><span class="stars">{{result.rating}}</span> <span class="stars" :id="result.id"></span> | <span :id="result.place_id"></span></p>
                 <p class="text-muted smaller">{{result.vicinity}}</p>
-                <p class="text-muted smaller">{{result.formatted_phone_number}} - <a :href="result.website">Website</a></p> 
+                <p class="text-muted smaller">{{result.formatted_phone_number}} - <a :href="result.website">Website</a></p>
+                <div class="flexor">
+                    <div>
+                        <a :href="getDirections()">Your Directions</a>
+                    </div>
+                    <div>
+                        <a :href="getFriendsDirections()">Friend's Directions</a>
+                    </div>
+                </div>
             </div>
             <div >
                 <img class="res-image" :src="this.photoImage" height="75" width="75">
             </div>
         </div>
-            <!-- <div>
+            <!-- <div> https://www.google.com/maps/dir/2148+S+Division+Ave,+Boise,+ID+83706/Starbucks,+S+Broadway+Ave,+Boise,+ID/
                 <div class="stars" :id="result.id"></div>
                 <div class="bg-stars">
                     <i class="fas fa-star"></i>
@@ -28,10 +36,11 @@
 
     export default {
         name: 'Results',
-        props: ['result', 'hovered'],
+        props: ['result', 'isHovered', 'origin', 'destination'],
         data() {
             return {
                 photoImage: ''
+                // yourDirections: getDirections()
             }
         },
         mounted() {
@@ -41,8 +50,18 @@
         },
         watch: {
             
-        },
+        },//Starbucks,+S+Broadway+Ave,+Boise,+ID/
         methods: {
+            getDirections() {
+                var url = 'https://www.google.com/maps/dir/'
+                var resultFormattedAddress = this.result.formatted_address.split(' ').join('+')
+                return url + this.origin + '/' + resultFormattedAddress
+            },
+            getFriendsDirections(){
+                var url = 'https://www.google.com/maps/dir/'
+                var resultFormattedAddress = this.result.formatted_address.split(' ').join('+')
+                return url + this.destination + '/' + resultFormattedAddress
+            },
             getImage(result){
                 if(!result.photos){
                    return this.photoImage = 'http://placehold.it/75x75'
@@ -92,6 +111,9 @@
         computed: {
             roadResults() {
                 return this.$store.state.roadResults
+            },
+            isHoveredOn(){
+                return this.isHovered == this.result.place_id ? 'hovered': 'isHoveredOn'
             }
         }
     }
@@ -99,7 +121,13 @@
 </script>
 
 <style scoped>
-    
+    .results {
+        transition: all .2s linear;
+        padding: .75rem 1.25rem;
+    }
+    .hovered{
+        background-color: #d6bc9f75
+    }
     .smaller {
         font-size: .85rem
     }

@@ -132,7 +132,7 @@ export default new vuex.Store({
         },
         getDistance({ commit, dispatch }, payload) {
 
-            distanceAPI.get(payload.orgin.lat + ',' + payload.orgin.lng + '&destinations=' + payload.destination.lat + ',' + payload.destination.lng + apiKey)
+            distanceAPI.get(payload.origin.lat + ',' + payload.origin.lng + '&destinations=' + payload.destination.lat + ',' + payload.destination.lng + apiKey)
                 .then(res => {
                     console.log('DISTANCE DATA:', res.data)
                         // dispatch distance to another function that 
