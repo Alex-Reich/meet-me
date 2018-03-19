@@ -183,7 +183,7 @@
                 })
             },
             submitPlace() {
-                this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius })
+                this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius, length: this.totalResults})
                 this.addCircle({ location: this.roadMidway, radius: this.radius })
 
             },
@@ -321,7 +321,10 @@
         border: .1rem solid #dddddd;
     }
     .list-group-item{
-        padding: 0
+        padding: 0;
+    }
+    .list-group-item, .list-group-item:hover{
+        z-index: auto;
     }
     .marg-top {
         margin-top: 1.5rem;
