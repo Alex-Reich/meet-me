@@ -56,7 +56,8 @@ export default new vuex.Store({
         roadResults: [],
         originAddress: '',
         destinationAddress: '',
-        contacts: {}
+        contacts: {},
+        emailSuccess: ''
     },
     modules: {
         authStore
@@ -96,18 +97,22 @@ export default new vuex.Store({
         },
         setContacts(state, payload) {
             state.contacts = payload
-        }
+        },
+        emailSuccess(state, payload) {
+            console.log('emailSuccess', payload)
+            state.emailSuccess = payload
+        },
     },
     actions: {
         //direction actions
         getTripOrigin({ commit, dispatch }, payload) {
             return new Promise((resolve, reject) => {
                 geocode.get(payload.origin + apiKey).then(res => {
-                        var data = res.data.results[0]
-                        commit('setOriginAddress', data.formatted_address)
-                        commit('setMapOrigin', { lat: data.geometry.location.lat, lng: data.geometry.location.lng })
-                        resolve({ lat: data.geometry.location.lat, lng: data.geometry.location.lng })
-                    })
+                    var data = res.data.results[0]
+                    commit('setOriginAddress', data.formatted_address)
+                    commit('setMapOrigin', { lat: data.geometry.location.lat, lng: data.geometry.location.lng })
+                    resolve({ lat: data.geometry.location.lat, lng: data.geometry.location.lng })
+                })
                     .catch(error => {
                         console.log(error)
                         reject()
@@ -117,16 +122,16 @@ export default new vuex.Store({
         getTripDestination({ commit, dispatch }, payload) {
             return new Promise((resolve, reject) => {
                 geocode.get(payload.destination + apiKey).then(res => {
-                        var data = res.data.results[0]
-                        commit('setDestinationAddress', data.formatted_address)
-                        commit('setMapDestination', { lat: data.geometry.location.lat, lng: data.geometry.location.lng })
-                        resolve({ lat: data.geometry.location.lat, lng: data.geometry.location.lng })
-                    })
+                    var data = res.data.results[0]
+                    commit('setDestinationAddress', data.formatted_address)
+                    commit('setMapDestination', { lat: data.geometry.location.lat, lng: data.geometry.location.lng })
+                    resolve({ lat: data.geometry.location.lat, lng: data.geometry.location.lng })
+                })
                     .catch(error => {
                         console.log(error)
                         reject()
                     })
-                    // commit('setMap', geocode + payload.origin + apiKey)
+                // commit('setMap', geocode + payload.origin + apiKey)
 
             })
         },
@@ -135,7 +140,7 @@ export default new vuex.Store({
             distanceAPI.get(payload.origin.lat + ',' + payload.origin.lng + '&destinations=' + payload.destination.lat + ',' + payload.destination.lng + apiKey)
                 .then(res => {
                     console.log('DISTANCE DATA:', res.data)
-                        // dispatch distance to another function that 
+                    // dispatch distance to another function that 
                 })
         },
         getPlaces({ commit, dispatch }, payload) {
@@ -147,6 +152,13 @@ export default new vuex.Store({
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        //sending an email functions
+        sendEmail({ commit, dispatch }, payload) {
+            console.log('EMAIL PAYLOAD IN STORE', payload)
+            serverAPI.post('send', payload.email).then(res => {
+                commit('emailSuccess', payload.id)
+            })
         },
         getContacts({ commit, dispatch }, payload) {
             serverAPI

@@ -4,7 +4,9 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-8">
-                    <div class="map-friend" id="map"></div>
+                    <div class="sticky-top stick">
+                        <div class="map-friend" id="map"></div>
+                    </div>
                 </div>
                 <div class="col-4">
                     <div v-if="show == false">
@@ -29,46 +31,46 @@
                         <h6>{{this.destinationAddress}}</h6>
                         <div class="flexor marg-top">
                             <div>
-                        <form v-on:change="submitPlace()">
-                            <select class="form-control form-control-sm" v-model="type">
-                                <option value="" disabled>Choose Category</option>
-                                <option value="coffee">Coffee Shops</option>
-                                <option value="restaurant">Restaurants</option>
-                                <option value="pizza">Pizza</option>
-                                <option value="sandwich">Sandwich</option>
-                                <option value="mexican+food">Mexican Food</option>
-                                <option value="asian+food">Asian Food</option>
-                                <option value="bar">Bars</option>
-                                <option value="ice+cream">Ice Cream</option>
-                                <option value="bakery">Bakeries</option>
-                                <option value="hotel">Hotel</option>
-                                <option value="park">Parks</option>
-                            </select>
-                        </form>
-                    </div>
-                        <div>
-                            <form v-on:change="submitPlace()">
-                                <select class="form-control form-control-sm" v-model="radius">
-                                    <option value="1609">1 Mile</option>
-                                    <option value="4828">3 Miles</option>
-                                    <option value="8046">5 Miles</option>
-                                    <option value="16093">10 Miles</option>
-                                </select>
-                            </form>
+                                <form v-on:change="submitPlace()">
+                                    <select class="form-control form-control-sm" v-model="type">
+                                        <option value="" disabled>Choose Category</option>
+                                        <option value="coffee">Coffee Shops</option>
+                                        <option value="restaurant">Restaurants</option>
+                                        <option value="pizza">Pizza</option>
+                                        <option value="sandwich">Sandwich</option>
+                                        <option value="mexican+food">Mexican Food</option>
+                                        <option value="asian+food">Asian Food</option>
+                                        <option value="bar">Bars</option>
+                                        <option value="ice+cream">Ice Cream</option>
+                                        <option value="bakery">Bakeries</option>
+                                        <option value="hotel">Hotel</option>
+                                        <option value="park">Parks</option>
+                                    </select>
+                                </form>
+                            </div>
+                            <div>
+                                <form v-on:change="submitPlace()">
+                                    <select class="form-control form-control-sm" v-model="radius">
+                                        <option value="1609">1 Mile</option>
+                                        <option value="4828">3 Miles</option>
+                                        <option value="8046">5 Miles</option>
+                                        <option value="16093">10 Miles</option>
+                                    </select>
+                                </form>
+                            </div>
+                            <div>
+                                <form v-on:change="submitPlace()">
+                                    <select class="form-control form-control-sm" v-model="totalResults">
+                                        <option value="10">10 Results</option>
+                                        <option value="15">15 Results</option>
+                                        <option value="20">20 Results</option>
+                                    </select>
+                                </form>
+                            </div>
                         </div>
-                        <div>
-                            <form v-on:change="submitPlace()">
-                                <select class="form-control form-control-sm" v-model="totalResults">
-                                    <option value="10">10 Results</option>
-                                    <option value="15">15 Results</option>
-                                    <option value="20">20 Results</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
                         <button class="btn marg-top teal btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
                         <div class="list-group marg-top">
-                            <div class="list-group-item" v-for="(result, index) in roadResults" v-if="index < totalResults">
+                            <div class="list-group-item" v-for="result in roadResults">
                                 <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
                             </div>
                         </div>
@@ -183,7 +185,7 @@
                 })
             },
             submitPlace() {
-                this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius, length: this.totalResults})
+                this.$store.dispatch('getPlaces', { midway: this.roadMidway, category: this.type, radius: this.radius, length: this.totalResults })
                 this.addCircle({ location: this.roadMidway, radius: this.radius })
 
             },
@@ -305,7 +307,7 @@
             destinationAddress() {
                 return this.$store.state.destinationAddress
             },
-            
+
         },
         components: {
             Results,
@@ -314,34 +316,46 @@
     }
 </script>
 <style scoped>
+    .stick{
+        top: 6vh;
+    }
     #map {
         height: 87vh;
         width: 100%;
         border-radius: 10px;
         border: .1rem solid #dddddd;
+        position: fixed;
     }
-    .list-group-item{
+
+    .list-group-item {
         padding: 0;
     }
-    .list-group-item, .list-group-item:hover{
+
+    .list-group-item,
+    .list-group-item:hover {
         z-index: auto;
     }
+
     .marg-top {
         margin-top: 1.5rem;
     }
-    .marg-bot{
+
+    .marg-bot {
         margin-bottom: 1rem
     }
-    .flexor{
+
+    .flexor {
         display: flex;
         justify-content: space-between;
     }
+
     .teal {
         background-color: #94bac4;
         color: white;
         font-size: 1.1rem;
         transition: all .3s linear;
     }
+
     .teal:hover {
         background-color: #96cad8;
     }
