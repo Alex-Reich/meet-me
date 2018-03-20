@@ -1,6 +1,8 @@
 <template>
     <div class="manageContacts">
+        <navbar></navbar>
         <h2>Manage Contacts</h2>
+
     <div class="container">
         <div class="row align-items">
             <div class="col-xs-3">Name</div>
@@ -17,18 +19,19 @@
 
     </div>
  
-        <footer class="modal-footer">
+        <div>
             <button type="button" class="btn btn-info btnEdit" @click="editContact(contact)">Edit Contact</button>
             <button type="button" class="btn btn-priority btnAdd" @click="addContact">Add Contact</button>
             <button type="button" class="btn btn-danger btnDelete" @click="deleteContact(contact)">Delete contact</button>
-        </footer>
+        </div>
     </div>
 </template>
 <script>
+    import Navbar from './Navbar'
     export default {
         name: 'Contacts',
         components: {
-            //contacts: contacts
+            navbar: Navbar
         },
         data() {
             return {}
@@ -36,7 +39,6 @@
         computed: {
             contacts() {
                 var contacts = this.$store.state.contacts
-                    //contacts.sort((contactA, contactB) => contactA.created - contactB.created)
                 return contacts
             }
         },
