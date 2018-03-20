@@ -49,8 +49,8 @@ router.put("/api/lists/:contactId", (req, res, next) => {
 })
 
 // Get contacts by userId
-router.get("/api/users/:userId/contacts", (req, res, next) => {
-    Contacts.find({ userId: req.params.userId })
+router.get("/api/contacts", (req, res, next) => {
+    Contacts.find({ userId: req.session.uid })
         .then(contacts => {
             return res.send(contacts)
         })

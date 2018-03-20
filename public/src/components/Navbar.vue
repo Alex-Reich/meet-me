@@ -139,7 +139,8 @@
             },
             createUser(createdUser) {
                 this.$store.dispatch('createUser', this.createdUser)
-                $('#signup').modal('hide')
+                $('#signUp').modal('hide')
+                this.createdUser = {}
             },
             meetFriend() {
                 this.$store.dispatch('meetFriend', this.user)

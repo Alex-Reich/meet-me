@@ -11,10 +11,10 @@
             <div class="col-xs-3">Phone</div>
         </div>
         <div class="row align-items" v-for="contact in contacts">
-            <div class="col-xs-3">Name</div>
-            <div class="col-xs-3">Address</div>
-            <div class="col-xs-3">Email</div>
-            <div class="col-xs-3">Phone</div>
+            <div class="col-xs-3">{{contact.name}}}</div>
+            <div class="col-xs-3">{{contact.address}}}</div>
+            <div class="col-xs-3">{{contact.email}}}</div>
+            <div class="col-xs-3">{{contact.phone}}}</div>
         </div>
 
     </div>
@@ -35,6 +35,9 @@
         },
         data() {
             return {}
+        },
+        mounted() {
+            this.$store.dispatch('getContacts');
         },
         computed: {
             contacts() {
