@@ -115,7 +115,6 @@
                             </div>
                             <div>
                                 <label for="email-body">Example Email: </label>
-                                <!-- <input type="text" :placeholder="email.message" v-model="email.subject" id="email-body" class="form-control"> -->
                                 <div id="email-body">
                                     <img src="../assets/email-screen.jpg" class="img-width">
                                 </div>
@@ -151,10 +150,6 @@
         watch: {
             emailSuccess: function(value){
                 console.log("Email Success value", value)
-                // if(value == true){
-                //     $('#'+this.result.place_id).modal('hide');
-                //     this.changeEmailSuccess();
-                // }
                 $('#'+value).modal('hide')
             }
         },
