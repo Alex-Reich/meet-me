@@ -1,14 +1,14 @@
 <template>
   <div class="home">
   
+<navbar></navbar>
 
+</navbar>
     <div class="container-fluid">
       <div>
         <div class="row d-flex justify-content-end">
             <router-link to="/Contacts">
-                <button type="button" class="btn mgContactBtn m-2" >
-                    <b>Manage Contacts</b>
-                </button>
+                <b>Manage Contacts</b>
             </router-link>            
             <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
                 <b>Sign Up</b>
@@ -27,10 +27,10 @@
      
       <div class="row d-flex justify-content-center ">
         <router-link to="/meet-friend"  class="colfmt d-flex align-items-center justify-content-center col-lg-4 m-4">
-        <div>
-          <h2>Meet a Friend</h2>
-        </div>
-    </router-link>
+            <div>
+                <h2>Meet a Friend</h2>
+            </div>
+        </router-link>
         <div class="colfmt d-flex align-items-center justify-content-center m-4 col-lg-4"><h2>Plan a Trip</h2></div>
       </div>
    
@@ -44,6 +44,7 @@
 <script>
     import Login from './Login'
     import Contacts from './Contacts'
+    import Navbar from './Navbar'
 
     export default {
         name: 'Home',
@@ -55,7 +56,8 @@
         },
         components: {
             login: Login,
-            contacts: Contacts
+            contacts: Contacts,
+            navbar: Navbar
         },
         methods: {
             login() {
