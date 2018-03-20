@@ -22,73 +22,72 @@
             </nav>
         </div>
     </template>
+
+<script>
+    export default {
+        name: 'Navbar',
+        data() {
+            return {
+
+
+            }
+        },
+        methods: {
+            logout() {
+                this.$store.dispatch('logout')
+            }
+        },
+        props: ['user']
+    }
+</script>
+
+
+<style scoped>
+    a {
+        color: #fff;
+    }
     
-    <script>
-        export default {
-            name: 'Navbar',
-            data() {
-                return {
+    a:hover {
+        text-decoration: none
+    }
     
+    .pointer {
+        cursor: pointer;
+    }
     
-                }
-            },
-            methods: {
-                logout() {
-                    this.$store.dispatch('logout')
-                }
-            },
-            props: ['user']
-        }
+    .navbar {
+        background-color: #3c6cae;
+        /* background-color: #7BA6D0; */
+        color: white;
+    }
     
-    </script>
+    .navbar h3 {
+        font-family: 'Paytone One', sans-serif;
+        font-weight: 800;
+        font-size: 2rem;
+    }
     
+    .dropdown-menu {
+        min-width: 0;
+        padding: .1rem 0;
+        left: -2rem;
+    }
     
-    <style scoped>
-        a {
-            color: #fff;
-        }
+    .dropdown-item:hover {
+        background-color: #f9f9f9;
+    }
     
-        a:hover {
-            text-decoration: none
-        }
+    .flexor {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+    }
     
-        .pointer {
-            cursor: pointer;
-        }
+    .flexor h3 {
+        margin-bottom: 0;
+    }
     
-        .navbar {
-            background-color: #3c6cae;
-            /* background-color: #7BA6D0; */
-            color: white;
-        }
-    
-        .navbar h3 {
-            font-family: 'Paytone One', sans-serif;
-            font-weight: 800;
-            font-size: 2rem;
-        }
-    
-        .dropdown-menu {
-            min-width: 0;
-            padding: .1rem 0;
-            left: -2rem;
-        }
-    
-        .dropdown-item:hover {
-            background-color: #f9f9f9;
-        }
-    
-        .flexor {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-        }
-    
-        .flexor h3 {
-            margin-bottom: 0;
-        }
-    
-        .pad-r {
-            padding-right: 1rem;
-        }
-    </style>
+    .pad-r {
+        padding-right: 1rem;
+    }
+</style>

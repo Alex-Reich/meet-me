@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '../router'
 
 
 var auth = axios.create({
@@ -10,18 +11,18 @@ export default {
         //region user actions
         createUser({ commit, dispatch }, payload) {
             auth.post("register", payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
+                    commit('updateUser', res.data.user)
+                    router.push({ name: 'Home' })
+                })
                 .catch(err => {
                     console.log(err)
                 })
         },
         login({ commit, dispatch }, payload) {
             auth.post('login', payload).then(res => {
-                commit('updateUser', res.data.user)
-                router.push({ name: 'Home' })
-            })
+                    commit('updateUser', res.data.user)
+                    router.push({ name: 'Home' })
+                })
                 .catch(err => {
                     console.log('Invalid Username or Password')
                 })
@@ -29,8 +30,8 @@ export default {
         },
         authenticate({ commit, dispatch }, payload) {
             auth.get('authenticate', payload).then(res => {
-                commit('updateUser', res.data)
-            })
+                    commit('updateUser', res.data)
+                })
                 .catch(err => {
                     console.log(err)
                 })
@@ -39,7 +40,6 @@ export default {
             auth.delete('logout')
                 .then(res => {
                     commit('updateUser', {})
-                    dispatch('authenticate', payload)
                 })
                 .catch(err => {
                     console.log(err)
