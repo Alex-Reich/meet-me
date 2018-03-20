@@ -98,17 +98,31 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Email Directions!</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div>
+                            <label for="email">Your Friends Email: </label>
+                            <input type="email" placeholder="jane@doe.com" v-model="email.emailAddress" id="email" class="form-control">
+                        </div>
+                        <div>
+                            <label for="subject">Email Subject: </label>
+                            <input type="text" :placeholder="email.subject" v-model="email.subject" id="subject" class="form-control">
+                        </div>
+                        <div>
+                            <label for="email-body">Email Body: </label>
+                            <!-- <input type="text" :placeholder="email.message" v-model="email.subject" id="email-body" class="form-control"> -->
+                            <div id="email-body">
+                                <img src="../assets/email-screen.jpg" class="img-width">
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary">Send Email</button>
                     </div>
                 </div>
             </div>
@@ -123,6 +137,13 @@
         props: ['result', 'isHovered', 'origin', 'destination'],
         data() {
             return {
+                email: {
+                    subject: "Directions to MeetMe@ Location",
+                    message: {
+                        name: this.result.name,
+                        friendsDirections: this.getFriendsDirections()
+                    }
+                }
             }
         },
         methods: {
@@ -149,7 +170,7 @@
 
                 return photoImage
 
-            },
+            }
         },
         computed: {
             roadResults() {
@@ -225,5 +246,11 @@
 
     .list-group-item {
         padding: .75rem
+    }
+    #email-body{
+        width: 100%
+    }
+    .img-width{
+        width: 100%
     }
 </style>
