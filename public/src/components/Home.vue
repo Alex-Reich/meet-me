@@ -7,15 +7,7 @@
     <div class="container-fluid">
       <div>
         <div class="row d-flex justify-content-end">
-            <router-link to="/Contacts">
-                <b>Manage Contacts</b>
-            </router-link>            
-            <button type="button" class="btn signUpBtn m-2" data-toggle="modal" data-target="#signUp">
-                <b>Sign Up</b>
-            </button>
-            <button type="button" class="btn loginBtn m-2" data-toggle="modal" data-target="#login">
-                <b>Login</b>
-            </button>
+            
         </div>
         <div class="row spacer"></div>
           <h1>Welcome to "Meet Me @..."</h1>
@@ -35,14 +27,13 @@
       </div>
    
   </div>
-  <login></login>
-  <contacts></contacts>
+  
+  
   
   </div>
 </template>
 
 <script>
-    import Login from './Login'
     import Contacts from './Contacts'
     import Navbar from './Navbar'
 
@@ -55,25 +46,25 @@
             }
         },
         components: {
-            login: Login,
+            // login: Login,
             contacts: Contacts,
             navbar: Navbar
         },
         methods: {
-            login() {
-                this.$store.dispatch('login', this.user)
-                $('#login').modal('hide')
-            },
-            createUser(createdUser) {
-                debugger
-                this.$store.dispatch('createUser', this.createdUser)
-                $('#signup').modal('hide')
-            },
+            // login() {
+            //     this.$store.dispatch('login', this.user)
+            //     $('#login').modal('hide')
+            // },
+            // createUser(createdUser) {
+            //     this.$store.dispatch('createUser', this.createdUser)
+            //     $('#signup').modal('hide')
+            // },
             meetFriend() {
                 this.$store.dispatch('meetFriend', this.user)
                 $('#meetFriend').modal('hide')
             },
             manageContacts() {
+                this.$store.dispatch('getContacts', this.user)
                 $('#contacts').modal('hide')
             }
         }

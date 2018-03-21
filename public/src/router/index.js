@@ -28,6 +28,11 @@ export default new Router({
             path: '/map-friend',
             name: 'MapFriend',
             component: MapFriend
+        },
+        {
+            path: '/contacts',
+            name: 'Contacts',
+            component: Contacts
         }
     ]
 })

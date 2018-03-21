@@ -7,7 +7,10 @@
 <script>
     import router from './router'
     export default {
-        name: 'Home'
+        name: 'Home',
+        mounted() {
+            this.$store.dispatch('authenticate')
+        }
     }
 </script>
 
