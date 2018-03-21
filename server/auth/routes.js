@@ -15,6 +15,7 @@ router.post('/auth/register', (req, res) => { // never call 'next' inside an aut
             user.password = null // probably Mongoose doesn't let you delete the password!!
             delete user.password // don't send the (hashed) password to the front-end
             req.session.uid = user._id // save the userId into the session
+            req.session.save();
             res.send(user)
         })
         .catch(err => {
@@ -35,6 +36,7 @@ router.post('/auth/login', (req, res) => {
             user.password = null // probably Mongoose doesn't let you delete the password!!
             delete user.password // don't send the (hashed) password to the front-end
             req.session.uid = user._id // save the userId into the session
+            req.session.save();
             res.send({ Message: "Successfully Logged In", user })
         })
         .catch(err => {
@@ -49,6 +51,7 @@ router.get('/auth/authenticate', (req, res) => {
                 return res.status(401).send({ error: "Please Login to Continue" })
             }
             user.password = null;
+            req.session.save();
             return res.status(200).send(user)
         }).catch(err => {
             return res.status(500).send({

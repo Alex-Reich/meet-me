@@ -42,8 +42,8 @@ router.delete("/api/contacts/:contactId", (req, res, next) => {
 // Update a contact by ID
 router.put("/api/lists/:contactId", (req, res, next) => {
     Contacts.findByIdAndUpdate(req.params.contactId, req.body, { new: true })
-        .then(list => {
-            res.send({ message: "Successfully updated contact", data: list })
+        .then(contact => {
+            res.send({ message: "Successfully updated contact", data: contact })
         })
         .catch(next)
 })

@@ -182,6 +182,17 @@ export default new vuex.Store({
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        editContact({ commit, dispatch }, contact) {
+            serverAPI
+                .put('contacts/${contact._id}', contact)
+                .then(res => {
+                    var updatedContact = res.data;
+                    commit('setContacts', updatedContact)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }
 });
