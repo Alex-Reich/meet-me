@@ -214,17 +214,6 @@
                         this.deleteCircle(circ)
                     }
                     console.log('RESULT CIRCLE', this.resultCircle)
-                    // this.deleteCircle(this.resultCircle.cityCircle)
-                    // var circle = new google.maps.Circle({
-                    //     strokeColor: '#797979',
-                    //     strokeOpacity: 0.5,
-                    //     strokeWeight: 2,
-                    //     fillColor: '#797979',
-                    //     fillOpacity: 0.35,
-                    //     map: this.map,
-                    //     radius: parseInt(data.radius)
-                    // });
-                    // this.resultCircle.push(cityCircle)
                 } else {
                     var circle = new google.maps.Circle({
                         strokeColor: '#797979',
