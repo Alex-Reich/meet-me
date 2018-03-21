@@ -29,8 +29,11 @@ router.post("/api/google", (req, res, next) => {
             }
             Promise.all(promises)
             .then(results =>{
-                console.log("results:", results)
-                return res.send(results)
+                if(results.length > 0){
+                    return res.send(results)
+                }else{
+                    return res.send("No Results")
+                }
             })
             .catch(err =>{
                 console.log(err)

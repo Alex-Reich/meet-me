@@ -57,7 +57,8 @@ export default new vuex.Store({
         originAddress: '',
         destinationAddress: '',
         contacts: {},
-        emailSuccess: ''
+        emailSuccess: '',
+        placesResults: false
     },
     modules: {
         authStore
@@ -87,6 +88,7 @@ export default new vuex.Store({
             state.midWayResults = payload
         },
         setRoadResults(state, payload) {
+            state.placesResults = true
             state.roadResults = payload
         },
         setOriginAddress(state, payload) {
@@ -99,13 +101,18 @@ export default new vuex.Store({
             state.contacts = payload
         },
         emailSuccess(state, payload) {
-            console.log('emailSuccess', payload)
             state.emailSuccess = payload
         },
+        noPlaces(state, payload){
+            state.placesResults = false
+        }
     },
     actions: {
         //direction actions
         getTripOrigin({ commit, dispatch }, payload) {
+            if(payload.origin.length == 0){
+                return payload.geolocation
+            }
             return new Promise((resolve, reject) => {
                 geocode.get(payload.origin + apiKey).then(res => {
                         var data = res.data.results[0]
@@ -147,7 +154,11 @@ export default new vuex.Store({
             serverAPI.post('google', payload)
                 .then(res => {
                     console.log('GOOGLE PLACES RESULTS', res.data)
-                    commit('setRoadResults', res.data)
+                    if(res.data == "No Results"){
+                        commit("noPlaces", res.data)
+                    }else{
+                        commit('setRoadResults', res.data)
+                    }
                 })
                 .catch(err => {
                     console.log(err)

@@ -68,15 +68,9 @@
 
                     |
                     <span v-if="result.price_level == undefined" style="color: #d1d1d1;"></span>
-                    <span v-if="result.price_level == 1">$
-                        <span style="color: #d1d1d1;">$$$</span>
-                    </span>
-                    <span v-if="result.price_level == 2">$$
-                        <span style="color: #d1d1d1;">$$</span>
-                    </span>
-                    <span v-if="result.price_level == 3">$$$
-                        <span style="color: #d1d1d1;">$</span>
-                    </span>
+                    <span v-if="result.price_level == 1">$<span style="color: #d1d1d1;">$$$</span></span>
+                    <span v-if="result.price_level == 2">$$<span style="color: #d1d1d1;">$$</span></span>
+                    <span v-if="result.price_level == 3">$$$<span style="color: #d1d1d1;">$</span></span>
                     <span v-if="result.price_level == 4">$$$$</span>
 
                 </p>
@@ -103,7 +97,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit="sendEmail">
+                    <form @submit.prevent="sendEmail">
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Your Friends Email: </label>
@@ -149,8 +143,7 @@
         },
         watch: {
             emailSuccess: function (value) {
-                console.log("Email Success value", value)
-                $('#' + value).modal('hide')
+                $('#'+value).modal('hide')
             }
         },
         methods: {

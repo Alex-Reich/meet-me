@@ -10,11 +10,19 @@
                 </div>
                 <div class="col-4">
                     <div v-if="show == false">
+                        <div v-if="geoShow == true">
+                            <label for="your-geo-location">Your GPS Location
+                                <i class="far fa-edit edit-button" @click="geoShowToggle()"></i>
+                            </label>
+                            <h6 id="your-geo-location">{{this.originAddress}}</h6>
+                        </div>
                         <div class="form">
                             <form @submit.prevent="getTrip(trip)">
-                                <div class="form-group">
-                                    <label for="your-location">Your Location</label>
-                                    <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address" required>
+                                <div v-if="geoShow == false">
+                                    <div class="form-group">
+                                        <label for="your-location">Your Location</label>
+                                        <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="contacts-location">Your Contacts Location</label>
@@ -24,9 +32,17 @@
                             </form>
                         </div>
                     </div>
-                    <div v-else>
-                        <h4>Your Location: </h4>
-                        <h6>{{this.originAddress}}</h6>
+                    <div v-if="show == true">
+                        <div v-if="geoShow == false">
+                            <h4>Your Location: </h4>
+                            <h6>{{this.originAddress}}</h6>
+                        </div>
+                        <div v-if="geoShow == true">
+                            <h4>Your GPS Location
+                                <i class="far fa-edit edit-button" @click="geoShowToggle(), show = false"></i>
+                            </h4>
+                            <h6>{{this.originAddress}}</h6>
+                        </div>
                         <h4>Your Contacts Location: </h4>
                         <h6>{{this.destinationAddress}}</h6>
                         <div class="flexor marg-top">
@@ -68,8 +84,11 @@
                                 </form>
                             </div>
                         </div>
-                        <button class="btn marg-top teal btn-block" @click="show = false, trip = {}, initMap()">New Search</button>
+                        <button class="btn marg-top teal btn-block" @click="show = false, initMap()">New Search</button>
                         <div class="list-group marg-top">
+                            <div v-if="this.placesResults == false">
+                                <h5>No Results Found... Try again idiot</h5>
+                            </div>
                             <div class="list-group-item" v-for="result in roadResults">
                                 <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
                             </div>
@@ -89,6 +108,7 @@
             return {
                 trip: {
                     origin: '',
+                    geolocation: {},
                     destination: '',
                     travelMode: 'DRIVING'
                 },
@@ -96,27 +116,31 @@
                 map: {},
                 markerCoordinats: [],
                 midwayPoint: {},
+                midwayMarker: [],
                 radius: 4828,
                 markers: [],
                 show: false,
                 totalResults: 10,
                 isHovered: '',
-                resultCircle: []
+                resultCircle: [],
+                geoShow: false
             }
         },
         mounted() {
-            this.initMap()
+            this.initMap();
+            this.geolocator();
         },
         watch: {
             roadResults: function (value) {
-                this.resultMarker(value)
-                this.roadMidwayMarker(this.roadMidway, this.map)
+                if (value.length > 0) {
+                    this.resultMarker(value)
+                }
             }
         },
         methods: {
             getTrip() {
                 this.show = true
-                this.trip.origin = this.trip.origin.split(' ').join('+')
+                this.trip.origin = this.trip.origin.split(' ').join('+');
                 this.trip.destination = this.trip.destination.split(' ').join('+')
                 Promise.all([
                     this.$store.dispatch('getTripOrigin', this.trip),
@@ -128,6 +152,8 @@
                 })
             },
             initMap() { // STARTING PLACEHOLDER MAP
+                this.$store.commit("setRoadResults", [])
+                var scope = this;
                 const element = document.getElementById('map')
                 const options = {
                     zoom: 15,
@@ -135,10 +161,36 @@
                 }
                 this.map = new google.maps.Map(element, options);
             },
+            geolocator() {
+                var scope = this;
+                this.geoShow = true
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        scope.trip.geolocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        }
+                        scope.getAddress(scope.trip.geolocation.lat, scope.trip.geolocation.lng)
+                    })
+                }
+            },
+            getAddress(lat, lng) {
+                var scope = this;
+                var geocoder = new google.maps.Geocoder();
+                var latLng = new google.maps.LatLng(lat, lng);
+                geocoder.geocode({ "latLng": latLng }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[0]) {
+                            scope.$store.commit("setOriginAddress", results[0].formatted_address)
+                        }
+                    } else {
+                        console.log("Geocode was not successful", status)
+                    }
+                })
+            },
             setMap(origin, destination) {
                 var start = { lat: origin.lat, lng: origin.lng }
                 var end = { lat: destination.lat, lng: destination.lng }
-                console.log('VOYAGE', start)
                 var bounds = new google.maps.LatLngBounds()
                 bounds.extend(start);
                 bounds.extend(end)
@@ -157,7 +209,11 @@
                 this.map.fitBounds(bounds)
                 var center = this.map.getCenter()
                 this.map.setCenter({ lat: center.lat(), lng: center.lng() })
-                this.findDrivingMidPoint(start, end)
+                if (!this.trip.geolocation.lat) {
+                    this.findDrivingMidPoint(start, end)
+                } else {
+                    this.findDrivingMidPoint(this.trip.geolocation, end)
+                }
             },
             findDrivingMidPoint(start, end) {
                 var scope = this
@@ -197,14 +253,21 @@
             //     this.$store.commit('setMidway', location)
             // },
             roadMidwayMarker(location, map) {
-                var marker = new google.maps.Marker({
+                if (this.midwayMarker.length > 0) {
+                    var midMarkers = this.midwayMarker
+                    for (var i = 0; i < midMarkers.length; i++) {
+                        var marker = midMarkers[i]
+                        this.deleteMarkers(marker)
+                    }
+                }
+                var midMarker = new google.maps.Marker({
                     position: location,
                     map: map,
                     draggable: true
-
                 })
+                this.midwayMarker.push(midMarker)
                 this.$store.commit('setRoadMidway', location)
-                marker.addListener('dragend', this.updateLatLng)
+                midMarker.addListener('dragend', this.updateLatLng)
             },
             addCircle(data) {
                 if (this.resultCircle.length > 0) {
@@ -213,7 +276,6 @@
                         var circ = resCircle[i]
                         this.deleteCircle(circ)
                     }
-                    console.log('RESULT CIRCLE', this.resultCircle)
                 } else {
                     var circle = new google.maps.Circle({
                         strokeColor: '#797979',
@@ -279,7 +341,13 @@
             deleteCircle(circle) {
                 circle.setMap(null)
                 this.resultCircle = []
-                this.addCircle({location: this.roadMidway, radius: this.radius})
+                this.addCircle({ location: this.roadMidway, radius: this.radius })
+            },
+            geoShowToggle() {
+                this.geoShow = false
+                var string = this.trip.destination.replace("+", " ")
+                this.trip.destination = string
+                this.$store.commit("setRoadResults", [])
             }
         },
         computed: {
@@ -298,6 +366,9 @@
             destinationAddress() {
                 return this.$store.state.destinationAddress
             },
+            placesResults() {
+                return this.$store.state.placesResults
+            }
 
         },
         components: {
@@ -350,5 +421,15 @@
 
     .teal:hover {
         background-color: #96cad8;
+    }
+
+    .smaller {
+        font-size: .85rem!
+    }
+
+    .edit-button {
+        font-size: .75rem;
+        color: #bbbbbb;
+        transition: all .2s linear;
     }
 </style>
