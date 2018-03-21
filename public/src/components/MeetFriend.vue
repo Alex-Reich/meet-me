@@ -100,7 +100,8 @@
                 markers: [],
                 show: false,
                 totalResults: 10,
-                isHovered: ''
+                isHovered: '',
+                resultCircle: []
             }
         },
         mounted() {
@@ -108,8 +109,8 @@
         },
         watch: {
             roadResults: function (value) {
-                console.log("VALUE", value)
                 this.resultMarker(value)
+                this.roadMidwayMarker(this.roadMidway, this.map)
             }
         },
         methods: {
@@ -121,13 +122,10 @@
                     this.$store.dispatch('getTripOrigin', this.trip),
                     this.$store.dispatch('getTripDestination', this.trip)
                 ]).then((results) => {
-                    console.log('mapping results')
                     this.setMap(results[0], results[1])
                 }).catch(err => {
                     console.log(err)
                 })
-                // this.trip.orgin = '';
-                // this.trip.destination = '';
             },
             initMap() { // STARTING PLACEHOLDER MAP
                 const element = document.getElementById('map')
@@ -159,12 +157,7 @@
                 this.map.fitBounds(bounds)
                 var center = this.map.getCenter()
                 this.map.setCenter({ lat: center.lat(), lng: center.lng() })
-                // this.midwayMarker({ lat: center.lat(), lng: center.lng() }, this.map)
                 this.findDrivingMidPoint(start, end)
-
-                // this.$store.commit('setMidway', { lat: center.lat(), lng: center.lng() })
-                // this.midwayPoint = { lat: center.lat(), lng: center.lng() }
-                // this.getDistance(start, end)
             },
             findDrivingMidPoint(start, end) {
                 var scope = this
@@ -175,11 +168,9 @@
                     travelMode: google.maps.TravelMode.DRIVING
                 }
                 directionsService.route(request, function (response, status) {
-                    console.log("DIRECTIONS RESPONSE", response)
                     if (status == google.maps.DirectionsStatus.OK) {
                         var numberofWaypoints = response.routes[0].overview_path.length
                         var midPoint = response.routes[0].overview_path[parseInt(numberofWaypoints / 2)]
-                        console.log("MIDPOINT", midPoint.lat(), midPoint.lng())
                         scope.roadMidwayMarker({ lat: midPoint.lat(), lng: midPoint.lng() }, scope.map)
                     }
                 })
@@ -215,27 +206,41 @@
                 this.$store.commit('setRoadMidway', location)
                 marker.addListener('dragend', this.updateLatLng)
             },
-            addCircle(location) {
-                console.log('LOCATION', location)
-                if (cityCircle) {
-
+            addCircle(data) {
+                if (this.resultCircle.length > 0) {
+                    var resCircle = this.resultCircle
+                    for (var i = 0; i < resCircle.length; i++) {
+                        var circ = resCircle[i]
+                        this.deleteCircle(circ)
+                    }
+                    console.log('RESULT CIRCLE', this.resultCircle)
+                    // this.deleteCircle(this.resultCircle.cityCircle)
+                    // var circle = new google.maps.Circle({
+                    //     strokeColor: '#797979',
+                    //     strokeOpacity: 0.5,
+                    //     strokeWeight: 2,
+                    //     fillColor: '#797979',
+                    //     fillOpacity: 0.35,
+                    //     map: this.map,
+                    //     radius: parseInt(data.radius)
+                    // });
+                    // this.resultCircle.push(cityCircle)
+                } else {
+                    var circle = new google.maps.Circle({
+                        strokeColor: '#797979',
+                        strokeOpacity: 0.5,
+                        strokeWeight: 2,
+                        fillColor: '#797979',
+                        fillOpacity: 0.35,
+                        center: data.location,
+                        map: this.map,
+                        radius: parseInt(data.radius)
+                    });
+                    this.resultCircle.push(circle)
                 }
-                var cityCircle = new google.maps.Circle({
-                    strokeColor: '#797979',
-                    strokeOpacity: 0.5,
-                    strokeWeight: 2,
-                    fillColor: '#797979',
-                    fillOpacity: 0.35,
-                    center: location.location,
-                    map: this.map,
-                    radius: parseInt(location.radius)
-                });
             },
             updateLatLng(marker) {
-                debugger
-                console.log('NEW POSITION:', { lat: marker.latLng.lat(), lng: marker.latLng.lng() })
                 var newPosition = { lat: marker.latLng.lat(), lng: marker.latLng.lng() }
-                console.log('NEW POSITION2:', newPosition)
                 this.$store.commit('setRoadMidway', newPosition)
                 this.submitPlace()
             },
@@ -268,18 +273,10 @@
                     })
                     google.maps.event.addListener(marker, 'mouseover', function () {
                         scope.isHovered = place.place_id
-                        // this.isHoveredOn = place.place_id
-                        // scope.highlight(place.place_id)
-                        console.log('I was Hovered on', this.isHovered)
                     })
                 }
-                // this.resultBounds(this.markers)
             },
-            // highlight(place_id){
-            //     document.getElementById(place_id).classList.add('hovered')
-            // },
             resultBounds(arr) {
-                console.log(arr)
                 var bounds = new google.maps.LatLngBounds()
                 for (var i = 0; i < arr.length; i++) {
                     var place = arr[i].geometry.location
@@ -289,6 +286,11 @@
             },
             deleteMarkers(marker) {
                 marker.setMap(null)
+            },
+            deleteCircle(circle) {
+                circle.setMap(null)
+                this.resultCircle = []
+                this.addCircle({location: this.roadMidway, radius: this.radius})
             }
         },
         computed: {
@@ -316,9 +318,10 @@
     }
 </script>
 <style scoped>
-    .stick{
+    .stick {
         top: 6vh;
     }
+
     #map {
         height: 87vh;
         width: 100%;
