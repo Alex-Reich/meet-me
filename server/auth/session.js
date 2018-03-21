@@ -11,7 +11,7 @@ store.on('error', function(err) {
 var session = expressSession({
     secret: '4 gUys iN a HackaThon$^!!',
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 7 * 52 // number of milliseconds in one year    
+        maxAge: (1000 * 60 * 60 * 24 * 7) * 52 // number of milliseconds in one year    
     },
     store,
     resave: true,
