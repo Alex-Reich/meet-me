@@ -27,10 +27,11 @@ export default {
                 .catch(err => {
                     console.log('Invalid Username or Password')
                 })
-
         },
         authenticate({ commit, dispatch }, payload) {
-            auth.get('authenticate', payload).then(res => {
+            auth.get('authenticate')
+                .then(res => {
+                    console.log('AUTH SESSION',res.data)
                     commit('updateUser', res.data)
                 })
                 .catch(err => {
