@@ -106,16 +106,16 @@
                     <form @submit="sendEmail">
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="email">Your Friends Email: </label>
-                                <input type="email" placeholder="jane@doe.com" v-model="email.emailAddress" id="email" class="form-control">
+                                <label>Your Friends Email: </label>
+                                <input type="email" placeholder="jane@doe.com" v-model="email.emailAddress" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="subject">Email Subject: </label>
-                                <input type="text" :placeholder="email.subject" v-model="email.subject" id="subject" class="form-control">
+                                <label>Email Subject: </label>
+                                <input type="text" :placeholder="email.subject" v-model="email.subject" class="form-control">
                             </div>
                             <div>
-                                <label for="email-body">Example Email: </label>
-                                <div id="email-body">
+                                <div>
+                                    <label>Example Email: </label>
                                     <img src="../assets/email-screen.jpg" class="img-width">
                                 </div>
                             </div>
@@ -148,9 +148,9 @@
             }
         },
         watch: {
-            emailSuccess: function(value){
+            emailSuccess: function (value) {
                 console.log("Email Success value", value)
-                $('#'+value).modal('hide')
+                $('#' + value).modal('hide')
             }
         },
         methods: {
@@ -178,8 +178,8 @@
                 return photoImage
 
             },
-            sendEmail(){
-                this.$store.dispatch('sendEmail', {email: this.email, id: this.result.place_id})
+            sendEmail() {
+                this.$store.dispatch('sendEmail', { email: this.email, id: this.result.place_id })
             }
         },
         computed: {
@@ -189,7 +189,7 @@
             isHoveredOn() {
                 return this.isHovered == this.result.place_id ? 'hovered' : 'isHoveredOn'
             },
-            emailSuccess(){
+            emailSuccess() {
                 return this.$store.state.emailSuccess
             }
         }
