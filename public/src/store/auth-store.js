@@ -4,7 +4,8 @@ import router from '../router'
 
 var auth = axios.create({
     baseURL: "//localhost:3000/auth/",
-    // timeout: 3000
+    timeout: 3000,
+    withCredentials: true
 });
 export default {
     actions: {
@@ -31,7 +32,7 @@ export default {
         authenticate({ commit, dispatch }, payload) {
             auth.get('authenticate')
                 .then(res => {
-                    console.log('AUTH SESSION',res.data)
+                    console.log('AUTH SESSION', res.data)
                     commit('updateUser', res.data)
                 })
                 .catch(err => {
