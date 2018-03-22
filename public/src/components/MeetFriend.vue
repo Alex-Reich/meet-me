@@ -12,12 +12,12 @@
                         <div class="map-friend hidden" id="map"></div>
                     </div>
                 </div>
-                <div v-if="loading == false">
+                <div class="col-4" v-if="loading == false">
                     <!-- <div class="container-fluid">
                 <div class="row">
                     <div class="col-8">
                     </div> -->
-                    <div class="col-4">
+                    <div>
                         <div v-if="show == false">
                             <div v-if="geoShow == true">
                                 <label for="your-geo-location">Your GPS Location
