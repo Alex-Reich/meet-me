@@ -1,96 +1,106 @@
 <template>
     <div class="meet-friend">
         <navbar class="marg-bot"></navbar>
+        <div v-if="loading == true">
+            <div class="loading-gif">
+            </div>
+        </div>
         <div class="container-fluid">
             <div class="row">
                 <div class="col-8">
                     <div class="sticky-top stick">
-                        <div class="map-friend" id="map"></div>
+                        <div class="map-friend hidden" id="map"></div>
                     </div>
                 </div>
-                <div class="col-4">
-                    <div v-if="show == false">
-                        <div v-if="geoShow == true">
-                            <label for="your-geo-location">Your GPS Location
-                                <i class="far fa-edit edit-button" @click="geoShowToggle()"></i>
-                            </label>
-                            <h6 id="your-geo-location">{{this.originAddress}}</h6>
-                        </div>
-                        <div class="form">
-                            <form @submit.prevent="getTrip(trip)">
-                                <div v-if="geoShow == false">
-                                    <div class="form-group">
-                                        <label for="your-location">Your Location</label>
-                                        <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
+                <div v-if="loading == false">
+                    <!-- <div class="container-fluid">
+                <div class="row">
+                    <div class="col-8">
+                    </div> -->
+                    <div class="col-4">
+                        <div v-if="show == false">
+                            <div v-if="geoShow == true">
+                                <label for="your-geo-location">Your GPS Location
+                                    <i class="far fa-edit edit-button" @click="geoShowToggle()"></i>
+                                </label>
+                                <h6 id="your-geo-location">{{this.originAddress}}</h6>
+                            </div>
+                            <div class="form">
+                                <form @submit.prevent="getTrip(trip)">
+                                    <div v-if="geoShow == false">
+                                        <div class="form-group">
+                                            <label for="your-location">Your Location</label>
+                                            <input v-model="trip.origin" type="text" class="form-control" id="your-location" placeholder="Your Address">
+                                        </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="contacts-location">Your Contacts Location</label>
+                                        <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
+                                    </div>
+                                    <button type="submit" class="btn teal btn-block">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div v-if="show == true">
+                            <div v-if="geoShow == false">
+                                <h4>Your Location: </h4>
+                                <h6>{{this.originAddress}}</h6>
+                            </div>
+                            <div v-if="geoShow == true">
+                                <h4>Your GPS Location
+                                    <i class="far fa-edit edit-button" @click="geoShowToggle(), show = false"></i>
+                                </h4>
+                                <h6>{{this.originAddress}}</h6>
+                            </div>
+                            <h4>Your Contacts Location: </h4>
+                            <h6>{{this.destinationAddress}}</h6>
+                            <div class="flexor marg-top">
+                                <div>
+                                    <form v-on:change="submitPlace()">
+                                        <select class="form-control form-control-sm" v-model="type">
+                                            <option value="" disabled>Choose Category</option>
+                                            <option value="coffee">Coffee Shops</option>
+                                            <option value="restaurant">Restaurants</option>
+                                            <option value="pizza">Pizza</option>
+                                            <option value="sandwich">Sandwich</option>
+                                            <option value="mexican+food">Mexican Food</option>
+                                            <option value="asian+food">Asian Food</option>
+                                            <option value="bar">Bars</option>
+                                            <option value="ice+cream">Ice Cream</option>
+                                            <option value="bakery">Bakeries</option>
+                                            <option value="hotel">Hotel</option>
+                                            <option value="park">Parks</option>
+                                        </select>
+                                    </form>
                                 </div>
-                                <div class="form-group">
-                                    <label for="contacts-location">Your Contacts Location</label>
-                                    <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
+                                <div>
+                                    <form v-on:change="submitPlace()">
+                                        <select class="form-control form-control-sm" v-model="radius">
+                                            <option value="1609">1 Mile</option>
+                                            <option value="4828">3 Miles</option>
+                                            <option value="8046">5 Miles</option>
+                                            <option value="16093">10 Miles</option>
+                                        </select>
+                                    </form>
                                 </div>
-                                <button type="submit" class="btn teal btn-block">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div v-if="show == true">
-                        <div v-if="geoShow == false">
-                            <h4>Your Location: </h4>
-                            <h6>{{this.originAddress}}</h6>
-                        </div>
-                        <div v-if="geoShow == true">
-                            <h4>Your GPS Location
-                                <i class="far fa-edit edit-button" @click="geoShowToggle(), show = false"></i>
-                            </h4>
-                            <h6>{{this.originAddress}}</h6>
-                        </div>
-                        <h4>Your Contacts Location: </h4>
-                        <h6>{{this.destinationAddress}}</h6>
-                        <div class="flexor marg-top">
-                            <div>
-                                <form v-on:change="submitPlace()">
-                                    <select class="form-control form-control-sm" v-model="type">
-                                        <option value="" disabled>Choose Category</option>
-                                        <option value="coffee">Coffee Shops</option>
-                                        <option value="restaurant">Restaurants</option>
-                                        <option value="pizza">Pizza</option>
-                                        <option value="sandwich">Sandwich</option>
-                                        <option value="mexican+food">Mexican Food</option>
-                                        <option value="asian+food">Asian Food</option>
-                                        <option value="bar">Bars</option>
-                                        <option value="ice+cream">Ice Cream</option>
-                                        <option value="bakery">Bakeries</option>
-                                        <option value="hotel">Hotel</option>
-                                        <option value="park">Parks</option>
-                                    </select>
-                                </form>
+                                <div>
+                                    <form v-on:change="submitPlace()">
+                                        <select class="form-control form-control-sm" v-model="totalResults">
+                                            <option value="10">10 Results</option>
+                                            <option value="15">15 Results</option>
+                                            <option value="20">20 Results</option>
+                                        </select>
+                                    </form>
+                                </div>
                             </div>
-                            <div>
-                                <form v-on:change="submitPlace()">
-                                    <select class="form-control form-control-sm" v-model="radius">
-                                        <option value="1609">1 Mile</option>
-                                        <option value="4828">3 Miles</option>
-                                        <option value="8046">5 Miles</option>
-                                        <option value="16093">10 Miles</option>
-                                    </select>
-                                </form>
-                            </div>
-                            <div>
-                                <form v-on:change="submitPlace()">
-                                    <select class="form-control form-control-sm" v-model="totalResults">
-                                        <option value="10">10 Results</option>
-                                        <option value="15">15 Results</option>
-                                        <option value="20">20 Results</option>
-                                    </select>
-                                </form>
-                            </div>
-                        </div>
-                        <button class="btn marg-top teal btn-block" @click="show = false, initMap()">New Search</button>
-                        <div class="list-group marg-top">
-                            <div v-if="this.placesResults == false">
-                                <h5>No Results Found... Try again idiot</h5>
-                            </div>
-                            <div class="list-group-item" v-for="result in roadResults">
-                                <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
+                            <button class="btn marg-top teal btn-block" @click="show = false, initMap()">New Search</button>
+                            <div class="list-group marg-top">
+                                <div v-if="this.placesResults == false">
+                                    <h5>No Results Found... Try again idiot</h5>
+                                </div>
+                                <div class="list-group-item" v-for="result in roadResults">
+                                    <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -106,6 +116,7 @@
         name: 'MeetFriend',
         data() {
             return {
+                loading: true,
                 trip: {
                     origin: '',
                     geolocation: {},
@@ -152,14 +163,13 @@
                 })
             },
             initMap() { // STARTING PLACEHOLDER MAP
-                this.$store.commit("setRoadResults", [])
-                var scope = this;
                 const element = document.getElementById('map')
                 const options = {
                     zoom: 15,
                     center: { lat: 43.6187102, lng: -116.2146068 } // BOISE ID
                 }
                 this.map = new google.maps.Map(element, options);
+                this.$store.commit("setRoadResults", [])
             },
             geolocator() {
                 var scope = this;
@@ -182,11 +192,17 @@
                     if (status == google.maps.GeocoderStatus.OK) {
                         if (results[0]) {
                             scope.$store.commit("setOriginAddress", results[0].formatted_address)
+                            scope.loading = false
+                            scope.removeHidden()
                         }
                     } else {
                         console.log("Geocode was not successful", status)
                     }
                 })
+            },
+            removeHidden() {
+                var element = document.getElementById("map")
+                element.classList.remove("hidden")
             },
             setMap(origin, destination) {
                 var start = { lat: origin.lat, lng: origin.lng }
@@ -378,6 +394,20 @@
     }
 </script>
 <style scoped>
+    .hidden {
+        display: none;
+    }
+
+    .loading-gif {
+        background-image: url("https://cdn.dribbble.com/users/747448/screenshots/2876287/littlepin_spinner.gif");
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
     .stick {
         top: 6vh;
     }
