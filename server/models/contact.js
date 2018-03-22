@@ -4,10 +4,9 @@ var ObjectId = mongoose.SchemaTypes.ObjectId
 var schemaName = "Contact"
 
 var schema = new Schema({
-    name: { type: String },
-    address: { type: String },
-    email: { type: String },
-    phone: { type: String },
+    name: { type: String, required: true },
+    address: { type: String, required: true },
+    email: { type: String, required: true},
     created: { type: Date, default: Date.now(), required: true },
     userId: { type: ObjectId, ref: "User", required: true }
 

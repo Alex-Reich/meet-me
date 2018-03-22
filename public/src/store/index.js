@@ -57,7 +57,7 @@ export default new vuex.Store({
         roadResults: [],
         originAddress: '',
         destinationAddress: '',
-        contacts: {},
+        contacts: [],
         emailSuccess: '',
         placesResults: false
     },
@@ -185,12 +185,31 @@ export default new vuex.Store({
                     console.log(err)
                 })
         },
-        editContact({ commit, dispatch }, contact) {
-            serverAPI
-                .put('contacts/${contact._id}', contact)
+        editContact({ commit, dispatch }, payload) {
+            console.log('EDITED CONTACT', payload)
+            serverAPI.put('contacts/'+ payload._id, payload)
                 .then(res => {
                     var updatedContact = res.data;
-                    commit('setContacts', updatedContact)
+                    dispatch('getContacts')
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        createContact({commit, dispatch}, payload) {
+            console.log('NEW CONTACT INFO', payload)
+            serverAPI.post('contacts', payload)
+                .then(res => {
+                    dispatch('getContacts')
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        deleteContact({commit, dispatch}, payload){
+            serverAPI.delete('contacts/' + payload._id)
+                .then(res => {
+                    dispatch('getContacts')
                 })
                 .catch(err => {
                     console.log(err)
