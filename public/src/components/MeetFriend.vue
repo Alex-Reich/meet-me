@@ -96,7 +96,7 @@
                             <button class="btn marg-top teal btn-block" @click="show = false, initMap()">New Search</button>
                             <div class="list-group marg-top">
                                 <div v-if="this.placesResults == false">
-                                    <h5>No Results Found... Try again idiot</h5>
+                                    <h5>No Results Found...</h5>
                                 </div>
                                 <div class="list-group-item" v-for="result in roadResults">
                                     <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
