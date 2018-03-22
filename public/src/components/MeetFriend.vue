@@ -173,14 +173,18 @@
             },
             geolocator() {
                 var scope = this;
-                this.geoShow = true
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(function (position) {
                         scope.trip.geolocation = {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude
                         }
+                        scope.geoShow = true
                         scope.getAddress(scope.trip.geolocation.lat, scope.trip.geolocation.lng)
+                    },
+                    function(error){
+                        scope.loading = false;
+                        scope.removeHidden()
                     })
                 }
             },
