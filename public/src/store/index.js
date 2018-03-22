@@ -2,7 +2,8 @@ import vue from 'vue';
 import vuex from 'vuex';
 import axios from 'axios';
 import router from '../router/index';
-import authStore from './auth-store'
+import authStore from './auth-store';
+import planTripStore from './plan-trip-store';
 
 
 var geocode = axios.create({
@@ -61,7 +62,8 @@ export default new vuex.Store({
         placesResults: false
     },
     modules: {
-        authStore
+        authStore,
+        planTripStore
     },
     mutations: {
         setMapOrigin(state, payload) {

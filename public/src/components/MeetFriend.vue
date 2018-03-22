@@ -13,10 +13,6 @@
                     </div>
                 </div>
                 <div class="col-4" v-if="loading == false">
-                    <!-- <div class="container-fluid">
-                <div class="row">
-                    <div class="col-8">
-                    </div> -->
                     <div>
                         <div v-if="show == false">
                             <div v-if="geoShow == true">
@@ -262,16 +258,6 @@
                     map: map
                 })
             },
-            // midwayMarker(location, map) {
-            //     var marker = new google.maps.Marker({
-            //         position: location,
-            //         map: map,
-            //         icon: {
-            //             url: '../assets/results-arrow.png'
-            //         }
-            //     })
-            //     this.$store.commit('setMidway', location)
-            // },
             roadMidwayMarker(location, map) {
                 if (this.midwayMarker.length > 0) {
                     var midMarkers = this.midwayMarker

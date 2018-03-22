@@ -4,7 +4,7 @@ import Home from '@/components/Home';
 import Login from '@/components/Login';
 import Contacts from '@/components/Contacts'
 import MeetFriend from '@/components/MeetFriend';
-import MapFriend from '@/components/MapFriend';
+import PlanTrip from '@/components/PlanTrip';
 
 Vue.use(Router);
 
@@ -25,9 +25,9 @@ export default new Router({
             component: MeetFriend
         },
         {
-            path: '/map-friend',
-            name: 'MapFriend',
-            component: MapFriend
+            path: '/plan-trip',
+            name: 'PlanTrip',
+            component: PlanTrip
         },
         {
             path: '/contacts',
