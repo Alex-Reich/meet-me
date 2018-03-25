@@ -12,7 +12,6 @@ export default {
         //region user actions
         createUser({ commit, dispatch }, payload) {
             auth.post("register", payload).then(res => {
-
                     commit('updateUser', res.data)
                     router.push({ name: 'Home' })
                 })

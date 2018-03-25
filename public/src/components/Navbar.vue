@@ -55,12 +55,13 @@
     </nav>
     <div class="modal fade" id="signUp" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content full-width">
+          <img class="mid" src="../assets/meet-me-logo-blue.png" height="125" width="125">
           <form @submit.prevent="createUser(createdUser)">
             <div class="modal-body">
               <div class="m-2">
                 <i class="fas mar-right fa-1x fa-user"></i>
-                <input type="text" name="username" v-model="createdUser.userName" placeholder=" Username" required>
+                <input type="text" name="username" v-model="createdUser.username" placeholder=" Username" required>
               </div>
               <div class="m-2">
                 <i class="far mar-right fa-1x fa-envelope"></i>
@@ -159,6 +160,18 @@
   #must-login {
     display: none;
   }
+
+.full-width {
+    width: 100%;
+}
+
+.mid {
+    margin: .5rem auto;
+}
+
+input {
+    width: 95%;
+}
 
   a {
     color: #fff;
