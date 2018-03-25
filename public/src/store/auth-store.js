@@ -1,9 +1,11 @@
 import axios from 'axios';
 import router from '../router'
 
+var production = window.location.host.includes('localhost'); // FOR HEROKU
+var herokuURL = production ? '//meetme-at.herokuapp.com/' : '//localhost:3000/' // FOR HEROKU
 
 var auth = axios.create({
-    baseURL: "//localhost:3000/auth/",
+    baseURL: herokuURL + "auth/",
     timeout: 3000,
     withCredentials: true
 });
@@ -13,7 +15,6 @@ export default {
         createUser({ commit, dispatch }, payload) {
             auth.post("register", payload).then(res => {
                     commit('updateUser', res.data)
-                    router.push({ name: 'Home' })
                 })
                 .catch(err => {
                     console.log(err)
@@ -22,7 +23,7 @@ export default {
         login({ commit, dispatch }, payload) {
             auth.post('login', payload).then(res => {
                     commit('updateUser', res.data.user)
-                    router.push({ name: 'Home' })
+                    // router.push({ name: 'Home' })
                 })
                 .catch(err => {
                     console.log('Invalid Username or Password')

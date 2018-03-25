@@ -1,5 +1,9 @@
 import vue from 'vue';
 import vuex from 'vuex';
+var production = window.location.host.includes('localhost'); // FOR HEROKU
+
+var herokuURL = production ? '//meetme-at.herokuapp.com/' : '//localhost:3000/' // FOR HEROKU
+
 import axios from 'axios';
 import router from '../router/index';
 import authStore from './auth-store';
@@ -12,7 +16,7 @@ var geocode = axios.create({
 });
 
 var serverAPI = axios.create({
-    baseURL: "//localhost:3000/api/",
+    baseURL: herokuURL + "api/",
     // timeout: 3000,
     withCredentials: true
 })

@@ -73,10 +73,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button type="button" class="btn grey-btn" data-dismiss="modal">
                 <b>close</b>
               </button>
-              <button type="submit" class="btn submitBtn">
+              <button type="submit" class="btn blue-btn">
                 <b>Create User</b>
               </button>
             </div>
@@ -87,7 +87,8 @@
     <!-- Login Modal Start -->
     <div class="modal fade" id="login" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content full-width">
+          <img class="mid" src="../assets/meet-me-logo-blue.png" height="125" width="125">
           <form @submit.prevent="login(user)">
             <div class="modal-body">
               <div class="m-2">
@@ -100,11 +101,11 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn submitBtn">
-                <b>Login</b>
-              </button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button type="button" class="btn grey-btn" data-dismiss="modal">
                 <b>close</b>
+              </button>
+              <button type="submit" class="btn blue-btn">
+                <b>Login</b>
               </button>
             </div>
           </form>
@@ -161,17 +162,39 @@
     display: none;
   }
 
-.full-width {
+  .full-width {
     width: 100%;
-}
+  }
 
-.mid {
+  .blue-btn {
+    background-color: #3c6cae;
+    color: white;
+    transition: all .3s linear;
+  }
+
+  .blue-btn:hover {
+    background-color: #5d8dcf;
+    color: white;
+  }
+
+  .grey-btn {
+      background-color: #afafaf;
+      color: white;
+      transition: all .3s linear;
+  }
+
+  .grey-btn:hover {
+      background-color: #7a7a7a;
+      color: white;
+  }
+
+  .mid {
     margin: .5rem auto;
-}
+  }
 
-input {
+  input {
     width: 95%;
-}
+  }
 
   a {
     color: #fff;
