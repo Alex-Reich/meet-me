@@ -30,22 +30,28 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="contacts-location">Your Contacts Location </label>
-                                        <div v-if="!user">
-                                            <div class="dropdown">
-                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">
-                                                    <i class="far fa-address-book"></i>
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <div v-for="contact in contacts">
-                                                        <a class="dropdown-item" @click="contactsLocation(contact.address)">{{contact.name}}</a>
+                                        <div class="flexor">
+                                            <div>
+                                                <label for="contacts-location">Your Contacts Location </label>
+                                            </div>
+                                            <div v-if="user">
+                                                <div class="dropdown">
+                                                    <i class="far fa-address-book" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <div v-if="contacts.length==0">
+                                                            <a class="dropdown-item">
+                                                                <router-link to="/contacts">Create a Contact</router-link>
+                                                            </a>
+                                                        </div>
+                                                        <div v-for="contact in contacts">
+                                                            <a class="dropdown-item" @click="contactsLocation(contact.address)">{{contact.name}}</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div v-else>
-                                            <button @click="showModal()" class="btn btn-secondary"><i class="far fa-address-book"></i></button>
+                                            <div v-else>
+                                                <i class="far fa-address-book" @click="showModal()"></i>
+                                            </div>
                                         </div>
                                         <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
                                     </div>
