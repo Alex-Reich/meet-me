@@ -30,7 +30,23 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="contacts-location">Your Contacts Location</label>
+                                        <label for="contacts-location">Your Contacts Location </label>
+                                        <div v-if="!user">
+                                            <div class="dropdown">
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <i class="far fa-address-book"></i>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <div v-for="contact in contacts">
+                                                        <a class="dropdown-item" @click="contactsLocation(contact.address)">{{contact.name}}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <button @click="showModal()" class="btn btn-secondary"><i class="far fa-address-book"></i></button>
+                                        </div>
                                         <input v-model="trip.destination" type="text" class="form-control" id="contacts-location" placeholder="Contact Address" required>
                                     </div>
                                     <button type="submit" class="btn teal btn-block">Submit</button>
@@ -167,6 +183,7 @@
                 this.map = new google.maps.Map(element, options);
                 this.$store.commit("setRoadResults", [])
             },
+            //finds the location of the user
             geolocator() {
                 var scope = this;
                 if (navigator.geolocation) {
@@ -178,12 +195,17 @@
                         scope.geoShow = true
                         scope.getAddress(scope.trip.geolocation.lat, scope.trip.geolocation.lng)
                     },
-                    function(error){
-                        scope.loading = false;
-                        scope.removeHidden()
-                    })
+                        function (error) {
+                            scope.loading = false;
+                            scope.removeHidden()
+                        })
                 }
             },
+            contactsLocation(address) {
+                this.trip.destination = "";
+                this.trip.destination = address;
+            },
+            //converts address to latitude and longitude
             getAddress(lat, lng) {
                 var scope = this;
                 var geocoder = new google.maps.Geocoder();
@@ -204,6 +226,7 @@
                 var element = document.getElementById("map")
                 element.classList.remove("hidden")
             },
+            //initiates the map with the origin, destination and midpoints
             setMap(origin, destination) {
                 var start = { lat: origin.lat, lng: origin.lng }
                 var end = { lat: destination.lat, lng: destination.lng }
@@ -354,6 +377,9 @@
                 var string = this.trip.destination.replace("+", " ")
                 this.trip.destination = string
                 this.$store.commit("setRoadResults", [])
+            },
+            showModal() {
+                $('#signUp').modal('show')
             }
         },
         computed: {
@@ -374,6 +400,12 @@
             },
             placesResults() {
                 return this.$store.state.placesResults
+            },
+            contacts() {
+                return this.$store.state.contacts
+            },
+            user() {
+                return this.$store.state.user
             }
 
         },
