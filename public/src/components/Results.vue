@@ -160,7 +160,7 @@
             getImage(result) {
                 var photoImage
                 if (!result.photos) {
-                    return photoImage = 'http://placehold.it/75x75'
+                    return photoImage = 'https://placehold.it/75x75'
                 }
 
                 photoImage = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=' +

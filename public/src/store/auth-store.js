@@ -1,7 +1,7 @@
 import axios from 'axios';
 import router from '../router'
 
-var production = window.location.host.includes('localhost'); // FOR HEROKU
+var production = !window.location.host.includes('localhost'); // FOR HEROKU
 var herokuURL = production ? '//meetme-at.herokuapp.com/' : '//localhost:3000/' // FOR HEROKU
 
 var auth = axios.create({
