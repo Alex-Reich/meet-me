@@ -1,6 +1,6 @@
 import vue from 'vue';
 import vuex from 'vuex';
-var production = window.location.host.includes('localhost'); // FOR HEROKU
+var production = !window.location.host.includes('localhost'); // FOR HEROKU
 
 var herokuURL = production ? '//meetme-at.herokuapp.com/' : '//localhost:3000/' // FOR HEROKU
 
