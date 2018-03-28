@@ -349,7 +349,7 @@
                     var marker = new google.maps.Marker({
                         position: place.geometry.location,
                         map: this.map,
-                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                        icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
                     })
                     this.markers.push(marker)
                     google.maps.event.addListener(marker, 'click', function () {
