@@ -24,7 +24,6 @@ router.post('/api/send', function (req, res, next) {
         subject: req.body.subject,
         html: `
         <div class="header">
-            <img src="https://meetme-at.herokuapp.com/static/meet-me-email.png"/>
             <p>MeetMe@ : ${req.body.message.name}</p>
         </div>
         <div class="body">
@@ -32,6 +31,7 @@ router.post('/api/send', function (req, res, next) {
         </div>
         <div class="footer">
             <p>Your MeetMe@ Team</p>
+            <img src="https://meetme-at.herokuapp.com/static/meet-me-email.png" height="50" width="50"/>
         </div>    
         `,
     };
