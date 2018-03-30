@@ -3,15 +3,14 @@ var nodemailer = require('nodemailer');
 var hsb = require('nodemailer-express-handlebars');
 
 var transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    from: 'meetme.at.website@gmail.com',
     host: 'smtp.gmail.com',
+    secure: true,
+    port: 465,
     auth: {
         user: 'meetme.at.website@gmail.com',
         pass: 'meet me halfway down'
     }
-},
-    {
-        from: 'meetme.at.website@gmail.com'
 });
 
 transporter.use('compile', hsb({
@@ -29,14 +28,21 @@ router.post('/api/send', function (req, res, next) {
             directionLink: req.body.message.friendsDirections
         }
     };
-    transporter.sendMail(mailOptions, function(error, response){
-        if(error){
+    transporter.sendMail(mailOptions, function (error, response) {
+        if (error) {
             console.log(error);
-            res.send({error: 'API ERROR'})
-        }else{
-            res.send({response: "Sent"})
+            res.send({
+                message: 'API ERROR',
+                error
+            })
+        } else {
+            res.send({
+                response: "Sent"
+            })
         }
     })
 })
 
-module.exports = { router };
+module.exports = {
+    router
+};
