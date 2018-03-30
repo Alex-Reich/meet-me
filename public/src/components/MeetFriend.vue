@@ -7,12 +7,12 @@
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12 col-md-8">
+                <div class="col-12 col-sm-8">
                     <div class="sticky-top stick">
                         <div class="map-friend hidden" id="map"></div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4" v-if="loading == false">
+                <div class="col-12 col-sm-4" v-if="loading == false">
                     <div>
                         <div v-if="show == false">
                             <div v-if="geoShow == true">

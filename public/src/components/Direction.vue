@@ -3,10 +3,10 @@
     <navbar class="marg-bot"></navbar>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-12 col-md-8">
+        <div class="col-12 col-sm-8">
           <div class="map-friend" id="direction-map"></div>
         </div>
-        <div class="col-4 col-md-4">
+        <div class="col-12 col-sm-4">
           <button class="btn btn-success btn-block" :href="identifyDevice()">Open in Google Maps</button>
 
           <div class="directionpanel" id="directions-panel"></div>
