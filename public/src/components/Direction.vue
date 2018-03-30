@@ -7,44 +7,10 @@
           <div class="map-friend" id="direction-map"></div>
         </div>
         <div class="col-12 col-sm-4">
-          <button class="btn btn-success btn-block" :href="identifyDevice()">Open in Google Maps</button>
+          <button class="btn btn-success btn-block" :href="this.device" @click="identifyDevice()">Open in Google Maps</button>
 
           <div class="directionpanel" id="directions-panel"></div>
         </div>
-        <!-- <div>
-          <div v-if="show == false">
-            <div v-if="geoShow == true">
-              <label for="your-geo-location">Your GPS Location
-                <i class="far fa-edit pointer edit-button" @click="geoShowToggle()"></i>
-              </label>
-              <h6 id="your-geo-location">{{this.originAddress}}</h6>
-            </div>
-
-          </div> -->
-        <!-- <div v-if="show == true">
-            <div v-if="geoShow == false">
-              <h4>Your Location: </h4>
-              <h6>{{this.originAddress}}</h6>
-            </div>
-            <div v-if="geoShow == true">
-              <h4>Your GPS Location
-                <i class="far fa-edit edit-button" @click="geoShowToggle(), show = false"></i>
-              </h4>
-              <h6>{{this.originAddress}}</h6>
-            </div>
-            <h4>Your Contacts Location: </h4>
-            <h6>{{this.destinationAddress}}</h6>
-            <button class="btn marg-top teal btn-block" @click="show = false, initMap()">New Search</button>
-            <div class="list-group marg-top">
-              <div v-if="this.placesResults == false">
-                <h5>No Results Found...</h5>
-              </div>
-              <div class="list-group-item" v-for="result in roadResults">
-                <results :origin="trip.origin" :destination="trip.destination" :isHovered="isHovered" :result="result"></results>
-              </div>
-            </div>
-          </div> -->
-        <!-- </div> -->
       </div>
     </div>
 
@@ -96,19 +62,23 @@
         })
       },
       identifyDevice() {
-          var out = ''
+        var out = ''
         var userAgent = navigator.userAgent || navigator.vendor || window.opera;
         if (/windows phone/i.test(userAgent)) {
-
-        }
-        if (/android/i.test(userAgent)) {
-
-        }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-          out = "comgooglemaps://?saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params.waypoint +
+          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
+            .waypoint +
             "&directionsmode=driving"
         }
-        return out
+        if (/android/i.test(userAgent)) {
+          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
+            .waypoint +
+            "&directionsmode=driving"
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
+            .waypoint +
+            "&directionsmode=driving"
+        }
       }
     },
     components: {
