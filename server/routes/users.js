@@ -6,7 +6,6 @@ var Users = require('../models/user');
 router.get('/users', (req, res, next) => {
     Users.findOne({ email: req.body.email })
         .then(user => {
-            console.log(user)
             if (!user) {
                 return res.status(401).send({ error: 'Invalid username' })
             }
