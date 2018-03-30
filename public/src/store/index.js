@@ -26,10 +26,6 @@ var placesAPI = axios.create({
     timeout: 3000
 })
 
-// var directions = axios.create({
-//     baseURL: "https://www.google.com/maps/embed/v1/directions?key=AAIzaSyDncWlc5Zb37QYDvrCT88Dybb6KsHwZ9HQ&origin=",
-//     timeout: 3000
-// })
 var distanceAPI = axios.create({
     baseURL: 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=',
     // timeout: 3000
@@ -144,7 +140,6 @@ export default new vuex.Store({
                         console.log(error)
                         reject()
                     })
-                    // commit('setMap', geocode + payload.origin + apiKey)
 
             })
         },
