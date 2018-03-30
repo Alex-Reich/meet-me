@@ -1,6 +1,5 @@
 var router = require('express').Router();
 var nodemailer = require('nodemailer');
-var hsb = require('nodemailer-express-handlebars');
 
 var transporter = nodemailer.createTransport({
     from: 'meetme.at.website@gmail.com',
