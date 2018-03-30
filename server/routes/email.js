@@ -3,40 +3,53 @@ var nodemailer = require('nodemailer');
 var hsb = require('nodemailer-express-handlebars');
 
 var transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    from: 'meetme.at.website@gmail.com',
     host: 'smtp.gmail.com',
+    secure: true,
+    port: 465,
     auth: {
         user: 'meetme.at.website@gmail.com',
         pass: 'meet me halfway down'
     }
-},
-    {
-        from: 'meetme.at.website@gmail.com'
 });
 
-transporter.use('compile', hsb({
-    viewPath: 'templates',
-    extName: '.hbs'
-}));
+// transporter.use('compile', hsb({
+//     viewPath: __dirname + '/templates',
+//     extName: '.hbs'
+// }));
 
 router.post('/api/send', function (req, res, next) {
     var mailOptions = {
         to: req.body.emailAddress,
         subject: req.body.subject,
-        template: 'email',
-        context: {
-            name: req.body.message.name,
-            directionLink: req.body.message.friendsDirections
-        }
+        html: `
+        <div class="header">
+            <p>MeetMe@ : ${req.body.message.name}</p>
+        </div>
+        <div class="body">
+            <p>Link to Your Directions: <a href="${req.body.message.friendsDirections}">Google Maps (${req.body.message.friendsDirections})</a></p>
+        </div>
+        <div class="footer">
+            <p>Your MeetMe@ Team</p>
+            <img src="https://meetme-at.herokuapp.com/static/meet-me-email.png" height="50" width="50"/>
+        </div>    
+        `,
     };
-    transporter.sendMail(mailOptions, function(error, response){
-        if(error){
+    transporter.sendMail(mailOptions, function (error, response) {
+        if (error) {
             console.log(error);
-            res.send({error: 'API ERROR'})
-        }else{
-            res.send({response: "Sent"})
+            res.send({
+                message: 'API ERROR',
+                error
+            })
+        } else {
+            res.send({
+                response: "Sent"
+            })
         }
     })
 })
 
-module.exports = { router };
+module.exports = {
+    router
+};

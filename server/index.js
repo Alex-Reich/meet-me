@@ -12,7 +12,7 @@ var contactRoutes = require('./routes/contacts')
 var googlePlacesRoutes = require('./routes/googlePlaces')
 var emailRoutes = require('./routes/email')
 
-var whitelist = ['http://localhost:8080', 'https://meetme-at.herokuapp.com/'] // CHANGE FOR HEROKU
+var whitelist = ['http://localhost:8080', 'https://meetme-at.herokuapp.com'] // CHANGE FOR HEROKU
 
 var corsOptions = {
     origin: function(origin, callback) {

@@ -5,6 +5,7 @@ import Login from '@/components/Login';
 import Contacts from '@/components/Contacts'
 import MeetFriend from '@/components/MeetFriend';
 import PlanTrip from '@/components/PlanTrip';
+import Direction from '@/components/Direction';
 
 Vue.use(Router);
 
@@ -33,6 +34,11 @@ export default new Router({
             path: '/contacts',
             name: 'Contacts',
             component: Contacts
+        },
+        {
+            path: '/direction/:origin/:waypoint/:destination',
+            name: 'Direction',
+            component: Direction
         }
     ]
 })

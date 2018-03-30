@@ -51,7 +51,6 @@ router.get('/auth/authenticate', (req, res) => {
                 return res.status(401).send({ error: "Please Login to Continue" })
             }
             user.password = null;
-            req.session.save();
             return res.status(200).send(user)
         }).catch(err => {
             return res.status(500).send({

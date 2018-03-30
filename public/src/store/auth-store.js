@@ -23,6 +23,7 @@ export default {
         login({ commit, dispatch }, payload) {
             auth.post('login', payload).then(res => {
                     commit('updateUser', res.data.user)
+                    dispatch('getContacts')
                     // router.push({ name: 'Home' })
                 })
                 .catch(err => {
@@ -43,6 +44,7 @@ export default {
             auth.delete('logout')
                 .then(res => {
                     commit('updateUser', {})
+                    commit('clearData', {})
                 })
                 .catch(err => {
                     console.log(err)

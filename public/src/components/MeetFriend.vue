@@ -17,7 +17,7 @@
                         <div v-if="show == false">
                             <div v-if="geoShow == true">
                                 <label for="your-geo-location">Your GPS Location
-                                    <i class="far fa-edit edit-button" @click="geoShowToggle()"></i>
+                                    <i class="far fa-edit pointer edit-button" @click="geoShowToggle()"></i>
                                 </label>
                                 <h6 id="your-geo-location">{{this.originAddress}}</h6>
                             </div>
@@ -35,8 +35,8 @@
                                                 <label for="contacts-location">Your Contacts Location </label>
                                             </div>
                                             <div v-if="user">
-                                                <div class="dropdown">
-                                                    <i class="far fa-address-book" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+                                                <div class="dropdown dropleft">
+                                                    <i class="fas fa-address-card pointer edit-button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                         <div v-if="contacts.length==0">
                                                             <a class="dropdown-item">
@@ -158,6 +158,7 @@
         mounted() {
             this.initMap();
             this.geolocator();
+            this.$store.dispatch('getContacts');
         },
         watch: {
             roadResults: function (value) {
@@ -481,13 +482,20 @@
         background-color: #96cad8;
     }
 
+    .pointer{
+        cursor: pointer;
+    }
+
     .smaller {
         font-size: .85rem!
     }
 
     .edit-button {
-        font-size: .75rem;
         color: #bbbbbb;
         transition: all .2s linear;
+    }
+
+    .edit-button:hover {
+        color: #3c6cae;
     }
 </style>
