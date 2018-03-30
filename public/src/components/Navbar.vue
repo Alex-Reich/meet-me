@@ -231,6 +231,7 @@
     padding: 1rem 0;
     margin-right: 10px;
     left: -8rem;
+    z-index: 1021;
   }
 
   .dropdown-item:hover {

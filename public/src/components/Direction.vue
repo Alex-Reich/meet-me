@@ -1,16 +1,15 @@
 <template>
   <div class="direction">
-    <navbar></navbar>
+    <navbar class="marg-bot"></navbar>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-8">
-            <div class="map-friend" id="direction-map"></div>
+        <div class="col-12 col-md-8">
+          <div class="map-friend" id="direction-map"></div>
         </div>
-        <div class="col-4">
-          <div class="directionpanel" id="directions-panel">
+        <div class="col-4 col-md-4">
+          <button class="btn btn-success btn-block" :href="identifyDevice()">Open in Google Maps</button>
 
-          </div>
-
+          <div class="directionpanel" id="directions-panel"></div>
         </div>
         <!-- <div>
           <div v-if="show == false">
@@ -58,7 +57,8 @@
     name: 'Direction',
     data() {
       return {
-        directionMap: {}
+        directionMap: {},
+        device: ''
       }
     },
     mounted() {
@@ -73,27 +73,9 @@
         const option = {
           zoom: 8,
           minZoom: 1,
-          center: {
-            lat: 43.6187102,
-            lng: -116.2146068
-          },
           mapTypeId: google.maps.MapTypeId.ROADMAP,
         }
-
         this.directionMap = new google.maps.Map(map, option); // CREATES NEW MAP
-
-
-        // this.addMarker(start, this.map)
-        // this.addMarker(end, this.map)
-
-        // this.map.fitBounds(bounds)
-        // var center = this.map.getCenter()
-        // this.map.setCenter({ lat: center.lat(), lng: center.lng() })
-        // if (!this.trip.geolocation.lat) {
-        //     this.findDrivingMidPoint(start, end)
-        // } else {
-        //     this.findDrivingMidPoint(this.trip.geolocation, end)
-        // }
         this.calcRoute(start, end)
       },
       calcRoute(start, end) {
@@ -112,6 +94,21 @@
             directionsDisplay.setPanel(document.getElementById('directions-panel'))
           }
         })
+      },
+      identifyDevice() {
+          var out = ''
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/windows phone/i.test(userAgent)) {
+
+        }
+        if (/android/i.test(userAgent)) {
+
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          out = "comgooglemaps://?saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params.waypoint +
+            "&directionsmode=driving"
+        }
+        return out
       }
     },
     components: {
@@ -134,6 +131,10 @@
     width: 100%;
     border-radius: 10px;
     border: .1rem solid #dddddd;
+  }
+
+  .marg-bot {
+    margin-bottom: 1rem
   }
 
 </style>
