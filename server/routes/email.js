@@ -14,7 +14,7 @@ var transporter = nodemailer.createTransport({
 });
 
 transporter.use('compile', hsb({
-    viewPath: 'templates',
+    viewPath: __dirname + '/templates',
     extName: '.hbs'
 }));
 
