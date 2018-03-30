@@ -73,10 +73,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn grey-btn" data-dismiss="modal">
+              <button type="button" class="btn btn-sm grey-btn" data-dismiss="modal">
                 <b>close</b>
               </button>
-              <button type="submit" class="btn blue-btn">
+              <button type="submit" class="btn btn-sm blue-btn">
                 <b>Create User</b>
               </button>
             </div>
@@ -101,10 +101,10 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn grey-btn" data-dismiss="modal">
+              <button type="button" class="btn btn-sm grey-btn" data-dismiss="modal">
                 <b>close</b>
               </button>
-              <button type="submit" class="btn blue-btn">
+              <button type="submit" class="btn btn-sm blue-btn">
                 <b>Login</b>
               </button>
             </div>
@@ -135,7 +135,6 @@
       },
       login() {
         this.$store.dispatch('login', this.user)
-        this.$store.dispatch('authenticate')
         $('#login').modal('hide')
       },
       createUser(createdUser) {

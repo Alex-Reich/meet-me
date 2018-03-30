@@ -111,6 +111,12 @@ export default new vuex.Store({
         },
         noPlaces(state, payload){
             state.placesResults = false
+        },
+        clearData(state, payload){
+            state.contacts = []
+            state.roadResults = []
+            state.midWayResults = []
+            state.user = {}
         }
     },
     actions: {
