@@ -7,7 +7,7 @@
           <div class="map-friend" id="direction-map"></div>
         </div>
         <div class="col-12 col-sm-4">
-          <button class="btn btn-success btn-block" :href="this.directions">Open in Google Maps</button>
+          <button class="btn btn-success btn-block" :href="this.directions" target="_blank">Open in Google Maps</button>
 
           <div class="directionpanel" id="directions-panel"></div>
         </div>
@@ -24,7 +24,7 @@
     data() {
       return {
         directionMap: {},
-        directions: "https://wwww.google.com/maps/dir/"+this.$route.params.origin+"/"+this.$route.params.waypoint
+        directions: "https://www.google.com/maps/dir/"+this.$route.params.origin+"/"+this.$route.params.waypoint
       }
     },
     mounted() {
