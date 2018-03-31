@@ -274,7 +274,7 @@
   }
 
   .img-width {
-    width: 85%
+    width: 85%;
   }
 
 </style>

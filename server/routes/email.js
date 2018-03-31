@@ -21,7 +21,7 @@ router.post('/api/send', function (req, res, next) {
             <p>MeetMe@ : ${req.body.message.name}</p>
         </div>
         <div class="body">
-            <p>Link to Your Directions: <a href="${req.body.message.friendsDirections}">Google Maps</a></p>
+            <p>Link to Your Directions: <a href="${req.body.message.friendsDirections}">${req.body.message.friendsDirections}</a></p>
         </div>
         <div class="footer">
             <p>Your MeetMe@ Team</p>
