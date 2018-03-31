@@ -1,0 +1,21 @@
+{
+    "name": "MeetMe@",
+    "short_name": "MeetMeAt",
+    "lang": "en-US",
+    "start_url": "https://meetme-at.herokuapp.com/#/",
+    "display": "minimal-ui",
+    "orientation": "portrait-primary",
+    "theme_color": "#3c6cae",
+    "icons": [
+      {
+        "src": "https://meetme-at.herokuapp.com/static/meet-me-email.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://meetme-at.herokuapp.com/static/meet-me-email.png",
+        "sizes": "50x50",
+        "type": "image/png"
+      }
+    ]
+  }

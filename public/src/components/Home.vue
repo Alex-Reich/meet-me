@@ -1,16 +1,22 @@
 <template>
   <div class="home">
     <navbar></navbar>
-    <div class="full">
-      <div>
-        <img src="../assets/meet-me-logo.png" height="300">
-      </div>
-      <div>
-        <h3>Don't know where to meet?</h3>
-        <h3  class="pad-bot">Let us worry about that.</h3>
-        <router-link to="/meet-friend">
-          <button class="btn btn-block btn-outline-light">Meet a Friend</button>
-        </router-link>
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md-9">
+          <div class="full">
+            <div>
+              <img src="../assets/meet-me-logo.png" height="300">
+            </div>
+            <div>
+              <h3>Don't know where to meet?</h3>
+              <h3 class="pad-bot">Let us worry about that.</h3>
+              <router-link to="/meet-friend">
+                <button class="btn btn-block btn-outline-light">Meet a Friend</button>
+              </router-link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- <div class="row d-flex justify-content-center ">
@@ -68,7 +74,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin: 0 10%
+    margin: 0 10%;
   }
 
   .aligner {
@@ -76,12 +82,12 @@
   }
 
   .pad-bot {
-      padding-bottom: 1rem;
+    padding-bottom: 1rem;
   }
 
   .home {
     background-image: url("../assets/bg-meet-me.jpg");
-    background-position: center;
+    background-position: center top;
     background-size: cover;
     height: 100vh;
     align-items: center;
@@ -117,8 +123,17 @@
   router-link {
     color: white;
   }
+
   a {
-      text-decoration: none;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .full {
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 10.5rem 0;
+    }
   }
 
 </style>
