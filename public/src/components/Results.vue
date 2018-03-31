@@ -146,6 +146,9 @@
         }
       }
     },
+    mounted(){
+      this.originAddress;
+    },
     watch: {
       emailSuccess: function (value) {
         $('#' + value).modal('hide')
