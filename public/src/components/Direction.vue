@@ -7,8 +7,9 @@
           <div class="map-friend" id="direction-map"></div>
         </div>
         <div class="col-12 col-sm-4">
-          <button class="btn btn-success btn-block" :href="this.directions" target="_blank">Open in Google Maps</button>
-
+          <a :href="this.directions" target="_blank">
+            <button class="btn teal btn-block marg-bot">Open in Google Maps</button>
+          </a>
           <div class="directionpanel" id="directions-panel"></div>
         </div>
       </div>
@@ -24,7 +25,7 @@
     data() {
       return {
         directionMap: {},
-        directions: "https://www.google.com/maps/dir/"+this.$route.params.origin+"/"+this.$route.params.waypoint
+        directions: "https://www.google.com/maps/dir/" + this.$route.params.origin + "/" + this.$route.params.waypoint
       }
     },
     mounted() {
@@ -88,4 +89,18 @@
     margin-bottom: 1rem
   }
 
+  a {
+    text-decoration: none;
+  }
+
+  .teal {
+    background-color: #94bac4;
+    color: white;
+    font-size: 1.1rem;
+    transition: all .3s linear;
+  }
+
+  .teal:hover {
+    background-color: #96cad8;
+  }
 </style>

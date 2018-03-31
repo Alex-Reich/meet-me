@@ -12,11 +12,6 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-// transporter.use('compile', hsb({
-//     viewPath: __dirname + '/templates',
-//     extName: '.hbs'
-// }));
-
 router.post('/api/send', function (req, res, next) {
     var mailOptions = {
         to: req.body.emailAddress,
@@ -26,11 +21,11 @@ router.post('/api/send', function (req, res, next) {
             <p>MeetMe@ : ${req.body.message.name}</p>
         </div>
         <div class="body">
-            <p>Link to Your Directions: <a href="${req.body.message.friendsDirections}">Google Maps (${req.body.message.friendsDirections})</a></p>
+            <p>Link to Your Directions: <a href="${req.body.message.friendsDirections}">Google Maps</a></p>
         </div>
         <div class="footer">
             <p>Your MeetMe@ Team</p>
-            <img src="https://meetme-at.herokuapp.com/static/meet-me-email.png" height="50" width="50"/>
+            <img src="https://meetme-at.herokuapp.com/static/meet-me-email.png" height="70" width="70"/>
         </div>    
         `,
     };

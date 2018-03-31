@@ -155,12 +155,12 @@
       getDirections() {
         var url = '//meetme-at.herokuapp.com/#/direction/'
         var resultFormattedAddress = this.result.formatted_address.split(' ').join('+')
-        return url + this.originAddress + '/' + resultFormattedAddress + '/' + this.destination
+        return url+this.originAddress+'/'+resultFormattedAddress+'/'+this.destination
       },
       getFriendsDirections() {
         var url = '//meetme-at.herokuapp.com/#/direction/'
         var resultFormattedAddress = this.result.formatted_address.split(' ').join('+')
-        return url + this.destination + '/' + resultFormattedAddress + '/' + this.originAddress
+        return url+this.destination+'/'+resultFormattedAddress+'/'+this.originAddress
       },
       getImage(result) {
         var photoImage
