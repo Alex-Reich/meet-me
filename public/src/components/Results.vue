@@ -141,7 +141,7 @@
           subject: "Directions to MeetMe@ Location",
           message: {
             name: this.result.name,
-            friendsDirections: this.getFriendsDirections()
+            friendsDirections: ""
           }
         }
       }
@@ -176,7 +176,11 @@
         return photoImage
 
       },
+      getOriginAddress(){
+
+      },
       sendEmail() {
+        this.email.message.friendsDirections = '//meetme-at.herokuapp.com/#/direction/'+this.destination+'/'+this.result.formatted_address.split(' ').join('+')+'/'+this.originAddress
         this.$store.dispatch('sendEmail', {
           email: this.email,
           id: this.result.place_id
