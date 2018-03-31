@@ -173,7 +173,6 @@ export default new vuex.Store({
         },
         //sending an email functions
         sendEmail({ commit, dispatch }, payload) {
-            console.log('EMAIL PAYLOAD IN STORE', payload)
             serverAPI.post('send', payload.email).then(res => {
                 commit('emailSuccess', payload.id)
             })
@@ -183,7 +182,6 @@ export default new vuex.Store({
                 .get('contacts')
                 .then(res => {
                     var contacts = res.data
-                    console.log(contacts)
                     commit('setContacts', contacts)
                 })
                 .catch(err => {
@@ -191,7 +189,6 @@ export default new vuex.Store({
                 })
         },
         editContact({ commit, dispatch }, payload) {
-            console.log('EDITED CONTACT', payload)
             serverAPI.put('contacts/'+ payload._id, payload)
                 .then(res => {
                     var updatedContact = res.data;
