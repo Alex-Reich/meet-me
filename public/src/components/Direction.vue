@@ -7,7 +7,7 @@
           <div class="map-friend" id="direction-map"></div>
         </div>
         <div class="col-12 col-sm-4">
-          <button class="btn btn-success btn-block" :href="this.device" @click="identifyDevice()">Open in Google Maps</button>
+          <button class="btn btn-success btn-block" :href="this.directions">Open in Google Maps</button>
 
           <div class="directionpanel" id="directions-panel"></div>
         </div>
@@ -24,7 +24,7 @@
     data() {
       return {
         directionMap: {},
-        device: ''
+        directions: "https://wwww.google.com/maps/dir/"+this.$route.params.origin+"/"+this.$route.params.waypoint
       }
     },
     mounted() {
@@ -60,25 +60,6 @@
             directionsDisplay.setPanel(document.getElementById('directions-panel'))
           }
         })
-      },
-      identifyDevice() {
-        var out = ''
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        if (/windows phone/i.test(userAgent)) {
-          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
-            .waypoint +
-            "&directionsmode=driving"
-        }
-        if (/android/i.test(userAgent)) {
-          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
-            .waypoint +
-            "&directionsmode=driving"
-        }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-          this.device = "maps://maps.google.com/maps?=saddr=" + this.$route.params.origin + "&daddr=" + this.$route.params
-            .waypoint +
-            "&directionsmode=driving"
-        }
       }
     },
     components: {
