@@ -73,7 +73,7 @@
               </div>
               <h4>Your Contacts Location: </h4>
               <h6>{{this.destinationAddress}}</h6>
-              <form @submit.preven="submitPlace()">
+              <form @submit.prevent="submitPlace()">
                 <div class="flexor marg-top">
                   <div class="form-group">
                     <select class="form-control form-control-sm" v-model="type">
@@ -183,6 +183,7 @@
       // STARTING PLACEHOLDER MAP
       initMap() {
         this.trip.destination = '';
+        this.trip.origin = '';
         const element = document.getElementById('map')
         const options = {
           zoom: 15,
