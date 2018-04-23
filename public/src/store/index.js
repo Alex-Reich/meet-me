@@ -116,8 +116,9 @@ export default new vuex.Store({
         }
     },
     actions: {
-        //direction actions
+        //GETS STARTING LOCATION
         getTripOrigin({ commit, dispatch }, payload) {
+            // IF GEOLOCATION IS USED
             if(payload.origin.length == 0){
                 return payload.geolocation
             }
@@ -134,6 +135,7 @@ export default new vuex.Store({
                     })
             })
         },
+        // GET TRIP DESTINATION
         getTripDestination({ commit, dispatch }, payload) {
             return new Promise((resolve, reject) => {
                 geocode.get(payload.destination + apiKey).then(res => {

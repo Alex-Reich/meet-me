@@ -26,7 +26,7 @@ server.use(cors(corsOptions));
 server.use(session);
 server.use(bp.json());
 server.use(bp.urlencoded({ extended: true }));
-server.use(express.static(__dirname + "/../public/dist")) // CHANGE FOR HEROKU
+server.use(express.static(__dirname + "/../public/dist")) // CHANGE FOR HEROKU - serves a static file
 
 server.use(authRoutes.router);
 server.use(contactRoutes.router);

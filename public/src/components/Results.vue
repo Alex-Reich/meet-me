@@ -82,11 +82,11 @@
         </p>
         <p class="text-muted smaller">{{result.vicinity}}</p>
         <p class="text-muted smaller">{{result.formatted_phone_number}} -
-          <a :href="result.website">Website</a>
+          <a :href="result.website" target="_blank">Website</a>
         </p>
         <div>
-          <a class="smaller" :href="getDirections()">Your Directions |</a>
-          <a class="smaller" :href="getFriendsDirections()"> Friend's Directions</a>
+          <a class="smaller" :href="getDirections()" target="_blank">Your Directions |</a>
+          <a class="smaller" :href="getFriendsDirections()" target="_blank"> Friend's Directions</a>
         </div>
       </div>
       <div>
